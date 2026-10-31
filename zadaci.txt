@@ -1,0 +1,7 @@
+VJEŽBA U POSTOJEĆOJ APLIKACIJI
+
+Na stranici Auti na prodaju ispod naslova prikaži koliko je auta trenutačno u ponudi.
+
+Dodaj novu stranicu Motocikli na prodaju s karticama dohvaćenima s API-ja. Dok se podatci učitavaju, korisnik vidi poruku o učitavanju.
+
+Klik na karticu motocikla otvara stranicu s fotografijom, nazivom, cijenom i gumbom za povratak na popis.

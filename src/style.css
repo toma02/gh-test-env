@@ -1,0 +1,1092 @@
+/* base */
+:root {
+  --tamna: #356fa8;
+  --svijetla: #f8f8f8;
+  --bijela: #ffffff;
+  --rub: #c8deef;
+  --tekst: #263b4f;
+  --tamna-hover: #285987;
+  --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--tekst);
+  background-color: var(--svijetla);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.header-wrapper,
+main {
+  width: 90%;
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+.skip-veza {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 16px;
+  color: var(--bijela);
+  background-color: var(--tamna);
+}
+
+.skip-veza:focus {
+  top: 10px;
+}
+
+@media (max-width: 899px) {
+  html {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 599px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+/* header i navigacija */
+header,
+footer {
+  color: var(--bijela);
+  background-color: var(--tamna);
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  color: var(--tekst);
+  background: var(--bijela);
+  border-bottom: 1px solid var(--rub);
+}
+
+.header-wrapper {
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: var(--tamna);
+  display: flex;
+}
+
+.header-linkovi,
+.footer-linkovi {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.header-linkovi a,
+.footer-linkovi a {
+  display: inline-block;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.hamburger {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  display: none;
+  border: 1px solid var(--tamna);
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 2px;
+  margin: 5px 0;
+  display: block;
+  background-color: currentColor;
+}
+
+@media (max-width: 599px) {
+  .header-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .nav-izbornik {
+    flex-basis: 100%;
+    display: none;
+    padding-bottom: 10px;
+  }
+
+  .nav-izbornik.otvoren {
+    display: block;
+  }
+
+  .header-linkovi {
+    flex-direction: column;
+  }
+}
+
+.hero {
+  position: relative;
+  min-height: 450px;
+  padding: 50px 5%;
+}
+
+.hero-slika {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(11, 22, 38, 0.8),
+    rgba(11, 22, 38, 0.2)
+  );
+}
+
+.hero-sadrzaj {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  color: var(--bijela);
+  margin: 0 auto;
+}
+
+.hero-oznaka {
+  color: rgb(142, 241, 241);
+  font-weight: bold;
+}
+
+.hero-sadrzaj h1 {
+  margin-bottom: 20px;
+  font-size: 4rem;
+  line-height: 1.1;
+  max-width: 600px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+@media (max-width: 599px) {
+  .hero-sadrzaj h1 {
+    font-size: 3rem;
+  }
+}
+
+main {
+  flex: 1;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* zajednicko */
+.section {
+  margin: 2rem 0;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+.kartice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.kartica {
+  flex: 1 1 260px;
+  padding: 1rem;
+  border: 1px solid var(--rub);
+  border-top: 5px solid var(--tamna);
+  border-radius: 10px;
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+}
+
+.gumb {
+  text-decoration: none;
+  border-radius: 5px;
+  align-self: flex-start;
+  padding: 10px 15px;
+  border: 1px solid var(--tamna);
+  color: var(--bijela);
+  background: var(--tamna);
+  cursor: pointer;
+  margin-bottom: 0.2rem;
+}
+
+.gumb:hover {
+  background: var(--tamna-hover);
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.forme {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.forma {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1 1 300px;
+  padding: 20px;
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--rub);
+  border-radius: 10px;
+}
+
+.forma label {
+  font-weight: bold;
+  color: var(--tekst);
+  max-width: 380px;
+}
+
+.forma input:not([type="checkbox"]),
+textarea {
+  padding: 5px;
+  border: 1px solid var(--rub);
+  color: var(--tekst);
+  border-radius: 5px;
+  max-width: 380px;
+}
+
+.forma input:focus,
+textarea:focus {
+  outline: 2px solid var(--tamna);
+  outline-offset: 2px;
+}
+
+.forma p {
+  max-width: 380px;
+}
+
+.greska {
+  color: red;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* footer */
+footer {
+  color: var(--tekst);
+  background: var(--bijela);
+  margin-top: 25px;
+  border-top: 1px solid var(--rub);
+}
+
+.footer-wrapper {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 12px;
+}
+
+.footer-linkovi {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-linkovi a:hover,
+.header-linkovi a:hover {
+  text-decoration: underline;
+}
+
+.footer-logo {
+  text-decoration: none;
+}
+
+@media (max-width: 599px) {
+  .footer-wrapper {
+    flex-direction: column;
+  }
+}
+
+/* Nadogradnja PRED55: zajednička kartica, detalji usluge i stranica 404. */
+/* PRED55: oznaka i cijena dijele razmak, boju i debljinu slova. */
+.oznaka-stranice,
+.cijena-usluge,
+.cijena-kartice {
+  color: var(--tamna);
+  font-weight: bold;
+}
+
+.oznaka-stranice,
+.cijena-usluge {
+  margin-bottom: 0.5rem;
+}
+
+/* PRED55: detalji i 404 dijele flex raspored, obrub, zaobljenje, pozadinu i sjenu. */
+.detalji-usluge,
+.stranica-404 {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--rub);
+  border-radius: 10px;
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+}
+
+/* PRED55: dodaje se raspored detalja usluge uz postojeće boje i --box-shadow. */
+.detalji-usluge {
+  overflow: hidden;
+}
+
+/* PRED55: fotografija ostaje u flex toku; pozicionira se samo tamni preljev. */
+.detalji-fotografija {
+  position: relative;
+  flex: 1 1 360px;
+  min-width: 0;
+  display: flex;
+  background: var(--rub);
+}
+
+/* PRED55: isti gradijent kao na hero dijelu, bez promjene osnovnog CSS-a. */
+.detalji-fotografija::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* PRED55: hero i detalji koriste isti preljev; osnovni CSS ostaje netaknut. */
+.hero::after,
+.detalji-fotografija::after {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 22, 38, 0.8),
+    rgba(11, 22, 38, 0.2)
+  );
+}
+
+/* PRED55: jednak omjer fotografija, bez filtera i bez promjene izvornog toka. */
+/* PRED55: sve fotografije kartica i detalja dijele osnovni prikaz. */
+.slika-usluge,
+.kartica-slika {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.slika-usluge {
+  height: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+/* PRED55: dodaju se prostor za opis i naglašena cijena usluge. */
+.detalji-sadrzaj {
+  flex: 1 1 300px;
+  padding: 28px;
+}
+
+.cijena-usluge {
+  font-size: 2.2rem;
+}
+
+/* PRED55: nepoznata stranica dodaje razmake uz tekst, fotografiju i povratak. */
+.stranica-404 {
+  align-items: center;
+  gap: 24px;
+  padding: 32px;
+}
+
+.tekst-404 {
+  flex: 1 1 300px;
+}
+
+.tekst-404 h1 {
+  font-size: 2.4rem;
+  line-height: 1.2;
+}
+
+.tekst-404 .gumb {
+  display: inline-block;
+}
+
+/* PRED55: fotografija Wrong Way upućuje na pogrešnu adresu. */
+.slika-404 {
+  flex: 1 1 280px;
+  width: 45%;
+  min-width: 0;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: right center;
+  border-radius: 10px;
+}
+
+/* PRED55: detalji i 404 prilagođavaju se uskom zaslonu. */
+@media (max-width: 599px) {
+  .detalji-sadrzaj,
+  .stranica-404 {
+    padding: 20px;
+  }
+
+  .slika-404 {
+    width: 100%;
+  }
+}
+
+/* Jednaka veličina poveznice i gumba u detaljima usluge. */
+.detalji-sadrzaj .actions .gumb {
+  flex: 1 1 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  min-height: 48px;
+  font: inherit;
+  text-align: center;
+}
+
+/* PRED55: zajednički sekundarni gumb; pred57 ga ponovno koristi u administraciji. */
+.gumb-povratak {
+  color: var(--tamna);
+  background: var(--svijetla);
+}
+
+.gumb-povratak:hover {
+  background: var(--rub);
+}
+
+/* PRED55: ponuda koristi fotografiju, oznaku trajanja i istaknutu cijenu. */
+.kartica-usluga {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+}
+
+.kartica-slika {
+  height: 170px;
+}
+
+.kartica-usluga .kartica-sadrzaj {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.kartica-usluga .oznaka-stranice {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--rub);
+  font-size: 0.9rem;
+}
+
+.kartica-usluga h3 {
+  font-size: 1.3rem;
+}
+
+.cijena-kartice {
+  font-size: 1.2rem;
+}
+
+.kartica-usluga .gumb {
+  align-self: stretch;
+  margin-top: auto;
+  text-align: center;
+}
+
+/* PRED55: zajednički poziv ima odvojene cjeline za opis i jasan sljedeći korak. */
+.poziv-kontakt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+  padding: 36px;
+  border: 1px solid var(--rub);
+  border-radius: 16px;
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+}
+
+.poziv-tekst {
+  flex: 2 1 400px;
+  min-width: 0;
+}
+
+.poziv-kontakt .oznaka-stranice {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: var(--tekst);
+  background: var(--rub);
+  font-size: 0.9rem;
+}
+
+.poziv-kontakt h2 {
+  max-width: 520px;
+  margin: 12px 0 16px;
+  font-size: 2.1rem;
+  line-height: 1.2;
+}
+
+.poziv-tekst > p:last-child {
+  max-width: 540px;
+  margin-bottom: 0;
+}
+
+/* PRED55: plava cjelina izdvaja poziv na kontakt od objašnjenja lijevo. */
+.poziv-radnja {
+  flex: 1 1 240px;
+  min-width: 0;
+  padding: 24px;
+  border-radius: 12px;
+  color: var(--bijela);
+  background: var(--tamna);
+}
+
+.poziv-radnja p {
+  margin-bottom: 16px;
+}
+
+.poziv-kontakt .gumb {
+  display: block;
+  padding: 12px 16px;
+  color: var(--tamna);
+  background: var(--bijela);
+  font-weight: bold;
+  text-align: center;
+}
+
+.poziv-kontakt .gumb:hover {
+  background: var(--rub);
+}
+
+.poziv-kontakt .gumb:focus-visible {
+  outline: 2px solid var(--bijela);
+  outline-offset: 4px;
+}
+
+/* PRED55: cjeline se prelamaju flexom, a na mobitelu se smanjuju razmaci. */
+@media (max-width: 599px) {
+  .poziv-kontakt {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .poziv-kontakt h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Nadogradnja PRED56: aktivne poveznice i dulji izbornik. */
+.header-linkovi a.active,
+.footer-linkovi a.active {
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* PRED56: hamburger ostaje do 599px prema osnovi; slijede potvrde i zaseban 404. */
+/* PRED56: potvrde su centrirani box između navigacije i podnožja. */
+.potvrda-raspored {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 40px;
+}
+
+/* PRED56: potvrda i uvod O nama dijele bijelu pozadinu i zaobljenje. */
+.potvrda,
+.o-nama-uvod {
+  border-radius: 12px;
+  background: var(--bijela);
+}
+
+.potvrda {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid var(--rub);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.potvrda-oznaka {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  color: var(--bijela);
+  background: var(--tamna);
+  font-weight: bold;
+}
+
+.potvrda h1 {
+  margin: 20px 0 1rem;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.potvrda p {
+  margin-bottom: 24px;
+  overflow-wrap: anywhere;
+}
+
+/* PRED56: samostalni raspored 404 nema zaglavlje, podnožje ni hero dio. */
+.samostalni-raspored {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 24px;
+}
+
+/* PRED56: varijanta fotografija komponente Kartica koristi zajedničku sliku i opis. */
+.kartica-fotografija {
+  padding: 0;
+  overflow: hidden;
+  border-top: 0;
+}
+
+/* PRED56: kartica-slika preuzima osnovu pred55, mijenja se samo visina i ton. */
+.kartica-fotografija img {
+  height: 230px;
+  filter: saturate(0.8);
+}
+
+/* PRED56: smanjuje se unutarnji razmak potvrda na mobitelu. */
+@media (max-width: 599px) {
+  .potvrda {
+    padding: 20px;
+  }
+}
+
+/* PRED56: varijanta kartice bira se propom; ponovno se koriste boje i sjena. */
+.kartica-pristup {
+  padding: 24px;
+  border: 0;
+  background: linear-gradient(135deg, var(--bijela), var(--rub));
+}
+
+.kartica-pristup h3 {
+  color: var(--tamna);
+}
+
+/* PRED56: uvod dobiva vlastitu cjelinu, a kartice zadržavaju zajedničku osnovu. */
+.o-nama-uvod {
+  padding: 28px;
+}
+
+.o-nama-uvod > p {
+  max-width: 850px;
+}
+
+.o-nama-uvod .kartice {
+  margin-top: 24px;
+}
+
+.kartica-fotografija p {
+  padding: 20px;
+  margin: 0;
+}
+
+.priprema-dolaska {
+  padding: 24px;
+  border: 1px solid var(--rub);
+  border-left: 6px solid var(--tamna);
+  border-radius: 12px;
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+}
+
+.priprema-dolaska li + li {
+  margin-top: 0.5rem;
+}
+
+/* PRED56: manji unutarnji razmak uvoda na mobitelu. */
+@media (max-width: 599px) {
+  .o-nama-uvod {
+    padding: 20px;
+  }
+}
+
+/* Nadogradnja PRED57: admin panel ponovno koristi gumbe, forme i poruke pogreške. */
+:root {
+  --modal-podloga: #263b4f99;
+}
+
+.admin-sekcije {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+/* PRED57: sekcija i modal dijele pozadinu i sjenu; ostalo je specifično prikazu. */
+.admin-sekcija,
+.modal {
+  background: var(--bijela);
+  box-shadow: var(--box-shadow);
+}
+
+.admin-sekcija {
+  flex: 1 1 400px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--rub);
+  border-radius: 10px;
+}
+
+.admin-zaglavlje,
+.admin-akcije {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-zaglavlje {
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.admin-zaglavlje h2 {
+  margin: 0;
+}
+
+.admin-broj {
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--svijetla);
+}
+
+/* PRED57: dohvaćaju se svi zapisi; svaka lista ima vlastito pomicanje. */
+.admin-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.admin-stavka {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rub);
+}
+
+.admin-stavka:last-child {
+  border-bottom: 0;
+}
+
+.admin-tekst {
+  overflow-wrap: anywhere;
+}
+
+.admin-tekst h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.zaposlenik-forma {
+  max-width: 600px;
+}
+
+/* PRED57: vlastiti modal, fixed podloga i flex centriranje, bez elementa dialog. */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--modal-podloga);
+}
+
+.modal {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+}
+
+.modal-zaglavlje {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 20px;
+  border-bottom: 1px solid var(--rub);
+}
+
+.modal-zaglavlje h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.modal-sadrzaj {
+  padding: 24px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 599px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal-zaglavlje,
+  .modal-sadrzaj {
+    padding: 16px;
+  }
+}
+
+/* PRED57: gumbi u listama i modalu preuzimaju veličinu okolnog teksta. */
+.admin-akcije .gumb,
+.modal .gumb {
+  font: inherit;
+}
+
+/* Nadogradnja PRED58: kartice auta imaju stalnu širinu pa se zadnji red ne razvlači. */
+.kartice-vozila .kartica {
+  flex: 0 1 32%;
+}
+
+/* PRED58: fotografije imaju široke bijele rubove pa se auto uvećava i centrira. */
+.kartice-vozila .kartica-slika {
+  width: 170%;
+  height: 200px;
+  margin-left: -35%;
+}
+
+@media (max-width: 899px) {
+  /* PRED58: šest poveznica prelazi u drugi red umjesto lomljenja naziva. */
+  .header-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .header-linkovi a {
+    white-space: nowrap;
+  }
+
+  .kartice-vozila .kartica {
+    flex-basis: 48%;
+  }
+}
+
+@media (max-width: 599px) {
+  .kartice-vozila .kartica {
+    flex-basis: 100%;
+  }
+}
+
+/* PRED58: galerija na detaljima auta; sličice mijenjaju veliku fotografiju. */
+.galerija-vozila {
+  flex: 1 1 360px;
+  padding: 20px;
+  overflow: hidden;
+  background: var(--svijetla);
+}
+
+/* PRED58: fotografije imaju široke prozirne rubove pa se auto uvećava i centrira. */
+.galerija-slika,
+.galerija-gumb img {
+  display: block;
+  width: 130%;
+  margin-left: -15%;
+  object-fit: cover;
+}
+
+.galerija-slika {
+  height: 300px;
+}
+
+.galerija-gumb img {
+  height: 56px;
+}
+
+.galerija-slicice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.galerija-gumb {
+  flex: 1 1 14%;
+  padding: 0;
+  border: 2px solid var(--rub);
+  border-radius: 5px;
+  background: var(--bijela);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.galerija-gumb[aria-pressed="true"] {
+  border-color: var(--tamna);
+}
+
+/* PRED58: recenzije izgledaju kao komentari, bez okvira i kartica. */
+.komentari {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.komentar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.komentar-avatar,
+.popust-vozila {
+  color: var(--bijela);
+  background: var(--tamna);
+  font-weight: bold;
+}
+
+.komentar-avatar {
+  flex: 0 0 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.komentar-autor,
+.komentar-ocjena,
+.komentar-tekst {
+  margin: 0;
+}
+
+.komentar-autor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.komentar-datum {
+  font-size: 0.9rem;
+}
+
+.zvjezdice {
+  color: var(--tamna);
+}
+
+/* PRED58: detalji slijede važnost podataka: naziv, ocjena, cijena, upit pa opis. */
+.detalji-vozila {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detalji-vozila h2,
+.detalji-vozila p,
+.ocjena-vozila {
+  margin: 0;
+}
+
+.detalji-vozila .oznaka-stranice {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--rub);
+  font-size: 0.9rem;
+}
+
+.cijena-vozila {
+  margin-top: 0.5rem;
+}
+
+.puna-cijena {
+  font-size: 0.95rem;
+}
+
+.nova-cijena {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nova-cijena strong {
+  color: var(--tamna);
+  font-size: 1.5rem;
+}
+
+.detalji-vozila .nova-cijena strong {
+  font-size: 2.2rem;
+}
+
+.kartice-vozila .cijena-vozila {
+  margin-bottom: 1rem;
+}
+
+.popust-vozila {
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.detalji-vozila .gumb {
+  align-self: stretch;
+  text-align: center;
+}
+
+.povratak-vozila {
+  align-self: flex-start;
+  margin-top: auto;
+  color: var(--tamna);
+}

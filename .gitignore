@@ -1,0 +1,11 @@
+node_modules/
+dist/
+
+# Fotografija koju aplikacija uvozi.
+!src/assets/car.jpg
+!src/assets/servis.jpg
+!src/assets/kocnice.jpg
+!src/assets/dijagnostika.jpg
+!src/assets/alat-radionice.jpg
+!src/assets/radionica-alat.jpg
+!src/assets/pogresan-smjer.jpg

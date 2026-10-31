@@ -1,0 +1,53 @@
+name: Objavi projekt
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  objava:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Preuzmi projekt
+        uses: actions/checkout@v6
+
+      - name: Postavi Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Postavi GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Instaliraj pakete
+        run: npm ci
+
+      - name: Provjeri i izgradi aplikaciju
+        run: npm run build -- --base="${{ steps.pages.outputs.base_path }}/"
+
+      - name: Omogući izravno otvaranje React ruta
+        run: cp dist/index.html dist/404.html
+
+      - name: Pripremi datoteke za objavu
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+      - name: Objavi na GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,22 @@
+PRED58 - STANJA DOHVATA I SLANJE UPITA
+
+GRADIVO IZ Predavanja.txt
+Dohvat podataka i prikaz; prikaz s map(), ključevi i fallback; loading i error stanja; POST zahtjevi (forma za kontakt); simulacija unosa i potvrda.
+
+ŠTO SE DODAJE U ODNOSU NA PRED57
+Cijeli projekt pred57 ostaje osnova. Tema je i dalje Autoservis FE. CSS pred57 ostaje početak CSS-a pred58, osim nekorištene klase .poslano i varijable --hero koje su uklonjene.
+Nova stranica Vozila na ruti /vozila prikazuje aute na prodaju. Header i Footer dobivaju poveznicu Auti.
+Stranica u useEffect dohvaća GET /products/category/vehicle i ima stanja vozila, ucitavanje i greska. Tijekom dohvata prikazuje Učitavanje auta..., a kad nema auta prikazuje fallback poruku.
+Aute prikazuje map() s key={vozilo.id} i novom komponentom KarticaVozila, koja prima objekt vozilo i ponovno koristi klase kartice usluge. Prikazuje fotografiju, oznaku marke, model, ocjenu, cijenu i poveznicu Detalji. Mala komponenta CijenaVozila prikazuje precrtanu punu cijenu, cijenu s popustom formatiranu s toLocaleString("hr-HR") i oznaku popusta. DummyJSON u polju price vraća punu cijenu, pa cijenu s popustom računa funkcija cijenaSPopustom iz src/api/index.js. Mala komponenta OcjenaVozila prikazuje zvjezdice, ocjenu i broj recenzija, a koriste je kartica i stranica detalja. Zvjezdice prikazuje zasebna komponenta Zvjezdice, koju koristi i KomentarVozila.
+Nova komponenta Nova stranica DetaljiVozila na ruti /vozila/:id čita id kroz useParams i dohvaća GET /products/:id. Tijekom dohvata prikazuje poruku o učitavanju, a kad auto nije dohvaćen ponovno koristi NotFound s povratkom na /vozila. Raspored ponovno koristi klase detalja usluge. Podatci su poredani po važnosti: oznaka marke, model, ocjena sa zvjezdicama i brojem recenzija, puna cijena i cijena s popustom, gumb Pošaljite upit, opis te poveznica Natrag na aute. Recenzije kupaca prikazuje map() s novom komponentom KomentarVozila: krug s početnim slovom imena, ime, datum, ocjena u zvjezdicama i tekst, bez okvira i kartica.
+Nova komponenta GalerijaVozila prima slike i naziv te ima stanje odabrana: klik na sličicu mijenja veliku fotografiju.
+
+OGRANIČENJA API-JA
+Teme POST zahtjevi te simulacija unosa i potvrda pokrivaju se dovršavanjem forme od prošlog puta, pa pred58 nema vlastiti obrazac.
+Nazivi i cijene auta probni su podatci, a opis i recenzije prikazuju se na engleskom kako ih vraća API.
+
+GLAVNE DATOTEKE
+src/pages/Vozila.jsx; src/pages/DetaljiVozila.jsx; src/components/KarticaVozila.jsx; src/components/OcjenaVozila.jsx; src/components/Zvjezdice.jsx; src/components/CijenaVozila.jsx; src/components/GalerijaVozila.jsx; src/components/KomentarVozila.jsx; src/App.jsx; src/components/Header.jsx; src/components/Footer.jsx; src/api/index.js; src/style.css.
+
+CSS NADOGRADNJA
+Blok PRED58 na kraju dodaje galeriju auta, izgled komentara, hijerarhiju podataka na detaljima, prelazak navigacije u drugi red do 899px jer ima šest poveznica, i klasu kartice-vozila: kartice imaju stalnu širinu (tri u redu na računalu, dvije na tabletu, jedna na mobitelu), auto se u fotografiji uvećava jer fotografije imaju široke bijele rubove, a cijena je istaknuta. Ostalo ponovno koristi postojeće klase.
