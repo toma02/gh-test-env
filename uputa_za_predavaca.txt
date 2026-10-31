@@ -1,20 +1,20 @@
-PRED58 - STANJA DOHVATA I SLANJE UPITA
+PRED59 - PRETRAŽIVANJE I FILTRIRANJE
 
 GRADIVO IZ Predavanja.txt
-Dohvat podataka i prikaz; prikaz s map(), ključevi i fallback; loading i error stanja; POST zahtjevi (forma za kontakt); simulacija unosa i potvrda.
+Reset stanja; pretraživanje podataka; filtriranje liste; interaktivni UI za filtriranje.
 
 CILJ PREDAVANJA
-Polaznici izrađuju stranicu Auti na prodaju i stranicu detalja auta: dohvaćaju podatke te prikazuju učitavanje, pogrešku i fallback. Sve se gradi na pred57, bez novih biblioteka. POST zahtjevi te simulacija unosa i potvrda pokrivaju se dovršavanjem forme od prošlog puta.
+Polaznici izvode prikazanu listu auta iz stanja filtera, kombiniraju pretragu, marku, raspon cijene, ocjenu i popust te slažu rezultat te vraćaju početno stanje. Važna poruka: filtrirana lista računa se pri renderu i ne sprema se u novo stanje. Raspon cijene i redoslijed koriste sniženu cijenu iz cijenaSPopustom, jednaku prikazanoj.
 
 REDOSLIJED RADA I OKVIRNI PLAN ZA ČETIRI SATA
-1. Prvih 60 minuta: ponoviti useEffect i useState, dodati rutu i poveznicu, dohvatiti aute, izraditi KarticaVozila s OcjenaVozila i CijenaVozila te prikazati aute s map() i key. Objasniti da je price puna cijena, a cijenaSPopustom računa sniženu, zatim dodati ucitavanje, greska i fallback.
-2. Sljedećih 60 minuta: u panelu mreže usporiti vezu i pokazati svako stanje, zatim izraditi DetaljiVozila s useParams i dohvatom po id-ju.
-3. Sljedećih 60 minuta: izraditi KomentarVozila i prikazati recenzije s map().
-4. Zadnjih 60 minuta: izraditi GalerijaVozila sa stanjem odabrane fotografije i proći cijeli tok od popisa do detalja.
+1. Prvih 60 minuta: u Vozila dodati stanje filteri, kontrolirano polje pretrage i metodu filter.
+2. Sljedećih 60 minuta: dodati broj rezultata, poruku kad nema rezultata i polja za raspon cijene.
+3. Sljedećih 60 minuta: izdvojiti FilterVozila, izvesti marke iz podataka pomoću Set i dodati gumbe marki s aria-pressed, zatim padajuće izbore ocjene i popusta.
+4. Zadnjih 60 minuta: redoslijed preko objekta poredak i metode sort, reset preko pocetniFilteri i provjera kombinacija filtera.
 Plan je okviran; pauze i tempo objašnjavanja prilagoditi grupi.
 
 PROVJERA
-Provjeriti poveznicu u zaglavlju i podnožju, učitavanje, pogrešku dohvata, prikaz pet auta, detalje auta, galeriju, recenzije i nepostojeći id.
+Provjeriti pretragu velikim i malim slovima, svaku marku, raspon cijene, ocjenu, popust, svaki redoslijed, kombinaciju filtera, poruku bez rezultata i reset.
 
 PREGLED RAZLIKA
-izmjene_po_datotekama.txt prikazuje aktualni diff prema pred57. Detaljan opis je u specifikacija.txt.
+izmjene_po_datotekama.txt prikazuje aktualni diff prema pred58. Detaljan opis je u specifikacija.txt.

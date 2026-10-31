@@ -1,7 +1,7 @@
 VJEŽBA U POSTOJEĆOJ APLIKACIJI
 
-Na stranici Auti na prodaju ispod naslova prikaži koliko je auta trenutačno u ponudi.
+Na stranici Auti na prodaju dodaj izbor koji ostavlja samo aute s više od 60 komada na zalihi.
 
-Dodaj novu stranicu Motocikli na prodaju s karticama dohvaćenima s API-ja. Dok se podatci učitavaju, korisnik vidi poruku o učitavanju.
+Dodaj potvrdni okvir Samo Dodge koji na ekranu ostavlja samo aute te marke.
 
-Klik na karticu motocikla otvara stranicu s fotografijom, nazivom, cijenom i gumbom za povratak na popis.
+Pored polja za pretragu dodaj mali gumb koji briše samo upisani tekst, a ostale filtre ostavlja kakvi jesu.

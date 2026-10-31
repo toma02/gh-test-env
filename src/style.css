@@ -1090,3 +1090,53 @@ footer {
   margin-top: auto;
   color: var(--tamna);
 }
+
+/* Nadogradnja PRED59: filtri ponovno koriste panel, natpise i polja klase forma. */
+.filteri {
+  margin-bottom: 1rem;
+}
+
+.filteri-polja,
+.filteri-radnje {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.filteri-polja {
+  margin-bottom: 1rem;
+}
+
+.filter-polje {
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-polje select {
+  max-width: 380px;
+  padding: 5px;
+  border: 1px solid var(--rub);
+  background: var(--bijela);
+  border-radius: 5px;
+  color: var(--tekst);
+}
+
+.filter-polje select:focus {
+  outline: 2px solid var(--tamna);
+  outline-offset: 2px;
+}
+
+.filteri-radnje {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filteri .actions {
+  margin-top: 0;
+}
+
+.filteri .gumb {
+  font: inherit;
+}
