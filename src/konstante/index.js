@@ -2,6 +2,9 @@ import slikaServisa from "../assets/servis.jpg";
 import slikaKocnica from "../assets/kocnice.jpg";
 import slikaDijagnostike from "../assets/dijagnostika.jpg";
 
+// Više od tri auta ne stane pregledno u tablicu usporedbe.
+export const najviseUsporedbe = 3;
+
 export const kategorije = [
   {
     naslov: "Održavanje bez odgađanja",

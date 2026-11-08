@@ -54,7 +54,7 @@ export function Header() {
               </li>
               <li>
                 <NavLink to="/admin" onClick={() => setOtvoren(false)}>
-                  Administracija
+                  Admin
                 </NavLink>
               </li>
               <li>

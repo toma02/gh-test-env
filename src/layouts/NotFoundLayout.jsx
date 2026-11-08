@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router";
 
 const NotFoundLayout = () => {
   return (
-    <main id="glavni-sadrzaj" className="samostalni-raspored">
+    <main id="glavni-sadrzaj" className="not-found-layout">
       <Link className="header-logo" to="/">
         Autoservis FE
       </Link>

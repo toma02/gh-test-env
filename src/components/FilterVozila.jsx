@@ -8,9 +8,9 @@ const FilterVozila = ({ filteri, marke, onPromijeni, onPonisti }) => {
           <label htmlFor="pretraga-vozila">Pretražite aute</label>
           <input
             id="pretraga-vozila"
-            name="pojam"
+            name="pojamPretrage"
             type="search"
-            value={filteri.pojam}
+            value={filteri.pojamPretrage}
             onChange={onPromijeni}
           />
         </div>
@@ -40,26 +40,13 @@ const FilterVozila = ({ filteri, marke, onPromijeni, onPonisti }) => {
           <label htmlFor="ocjena-vozila">Najmanja ocjena</label>
           <select
             id="ocjena-vozila"
-            name="ocjena"
-            value={filteri.ocjena}
+            name="najmanjaOcjena"
+            value={filteri.najmanjaOcjena}
             onChange={onPromijeni}
           >
             <option value="0">Sve ocjene</option>
             <option value="3">Barem 3</option>
             <option value="4">Barem 4</option>
-          </select>
-        </div>
-        <div className="filter-polje">
-          <label htmlFor="popust-vozila">Najmanji popust</label>
-          <select
-            id="popust-vozila"
-            name="popust"
-            value={filteri.popust}
-            onChange={onPromijeni}
-          >
-            <option value="0">Svi auti</option>
-            <option value="5">Barem 5 %</option>
-            <option value="10">Barem 10 %</option>
           </select>
         </div>
         <div className="filter-polje">
@@ -82,12 +69,11 @@ const FilterVozila = ({ filteri, marke, onPromijeni, onPonisti }) => {
           {marke.map((marka) => (
             <Button
               key={marka}
-              name="marka"
+              name="odabranaMarka"
               value={marka}
               className={
-                filteri.marka === marka ? "gumb" : "gumb gumb-povratak"
+                filteri.odabranaMarka === marka ? "gumb" : "gumb gumb-povratak"
               }
-              aria-pressed={filteri.marka === marka}
               onClick={onPromijeni}
             >
               {marka}

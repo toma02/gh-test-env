@@ -1,4 +1,4 @@
-import PozivNaKontakt from "../components/PozivNaKontakt";
+import KontaktCTA from "../components/KontaktCTA";
 import Kartica from "../components/Kartica";
 import { nacinRada } from "../konstante";
 import slikaServisa from "../assets/alat-radionice.jpg";
@@ -8,7 +8,7 @@ const ONama = () => {
   return (
     <>
       <section className="section o-nama-uvod">
-        <p className="oznaka-stranice">Upoznajte Autoservis FE</p>
+        <p className="oznaka">Upoznajte Autoservis FE</p>
         <h2>Briga o vozilu počinje dobrim dogovorom</h2>
         <p>
           Pomažemo vam pri redovitom održavanju, provjeri kočnica i pronalasku
@@ -30,7 +30,7 @@ const ONama = () => {
         <h2>Od pregleda do održavanja</h2>
         <div className="kartice o-nama-galerija">
           <Kartica
-            varijanta="fotografija"
+            varijanta="img"
             stavka={{
               slika: slikaServisa,
               opisSlike: "Ključevi i kliješta na radnoj površini",
@@ -38,7 +38,7 @@ const ONama = () => {
             }}
           />
           <Kartica
-            varijanta="fotografija"
+            varijanta="img"
             stavka={{
               slika: slikaDijagnostike,
               opisSlike: "Alat za održavanje ispred vozila u radionici",
@@ -48,7 +48,7 @@ const ONama = () => {
         </div>
       </section>
       <section className="section priprema-dolaska">
-        <p className="oznaka-stranice">Prije dolaska</p>
+        <p className="oznaka">Prije dolaska</p>
         <h2>Što nam pomaže pri pregledu?</h2>
         <p>
           Ne morate znati uzrok kvara. Dovoljno je opisati što ste primijetili.
@@ -61,7 +61,7 @@ const ONama = () => {
           <li>Navedite planirate li dulje putovanje ili redoviti pregled.</li>
         </ul>
       </section>
-      <PozivNaKontakt
+      <KontaktCTA
         naslov="Niste sigurni odakle početi?"
         opis="Opišite što ste primijetili i zajedno ćemo dogovoriti sljedeći korak."
       />

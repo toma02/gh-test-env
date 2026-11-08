@@ -1,5 +1,3 @@
-import Zvjezdice from "./Zvjezdice";
-
 const KomentarVozila = ({ recenzija }) => {
   return (
     <li className="komentar">
@@ -13,12 +11,7 @@ const KomentarVozila = ({ recenzija }) => {
             {new Date(recenzija.date).toLocaleDateString("hr-HR")}
           </span>
         </p>
-        <p
-          className="komentar-ocjena"
-          aria-label={`Ocjena ${recenzija.rating} od 5`}
-        >
-          <Zvjezdice ocjena={recenzija.rating} />
-        </p>
+        <p className="komentar-ocjena">Ocjena: {recenzija.rating} / 5</p>
         <p className="komentar-tekst">{recenzija.comment}</p>
       </div>
     </li>

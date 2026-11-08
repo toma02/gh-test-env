@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "./Button";
 
-const prazno = { firstName: "", lastName: "", email: "" };
-
 const ZaposlenikForma = ({ onDodaj }) => {
-  const [podatci, setPodatci] = useState(prazno);
+  const [podatci, setPodatci] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   function promijeni(event) {
     setPodatci({ ...podatci, [event.target.name]: event.target.value });
@@ -13,7 +15,7 @@ const ZaposlenikForma = ({ onDodaj }) => {
   async function posalji(event) {
     event.preventDefault();
     await onDodaj(podatci);
-    setPodatci(prazno);
+    setPodatci({ firstName: "", lastName: "", email: "" });
   }
 
   return (
@@ -27,7 +29,6 @@ const ZaposlenikForma = ({ onDodaj }) => {
         <input
           id="zaposlenik-ime"
           name="firstName"
-          autoComplete="given-name"
           minLength={2}
           required
           value={podatci.firstName}
@@ -37,7 +38,6 @@ const ZaposlenikForma = ({ onDodaj }) => {
         <input
           id="zaposlenik-prezime"
           name="lastName"
-          autoComplete="family-name"
           minLength={2}
           required
           value={podatci.lastName}
@@ -48,7 +48,6 @@ const ZaposlenikForma = ({ onDodaj }) => {
           id="zaposlenik-email"
           name="email"
           type="email"
-          autoComplete="email"
           required
           value={podatci.email}
           onChange={promijeni}

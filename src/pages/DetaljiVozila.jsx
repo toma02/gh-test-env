@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import NotFound from "./NotFound";
-import CijenaVozila from "../components/CijenaVozila";
 import GalerijaVozila from "../components/GalerijaVozila";
+import KalkulatorRata from "../components/KalkulatorRata";
 import KomentarVozila from "../components/KomentarVozila";
-import OcjenaVozila from "../components/OcjenaVozila";
-import { zahtjev } from "../api";
+import { apiRequest } from "../api";
 
 const DetaljiVozila = () => {
   const { id } = useParams();
@@ -13,22 +12,22 @@ const DetaljiVozila = () => {
   const [ucitavanje, setUcitavanje] = useState(true);
 
   useEffect(() => {
-    async function dohvati() {
+    async function dohvatiPodatke() {
       try {
-        setVozilo(await zahtjev(`products/${id}`));
+        setVozilo(await apiRequest(`products/${id}`));
       } catch {
         // Bez dohvaćenog auta stranica prikazuje NotFound.
       } finally {
         setUcitavanje(false);
       }
     }
-    dohvati();
+    dohvatiPodatke();
   }, [id]);
 
   if (ucitavanje)
     return (
       <section className="section">
-        <p role="status">Učitavanje auta...</p>
+        <p>Učitavanje auta...</p>
       </section>
     );
 
@@ -43,25 +42,8 @@ const DetaljiVozila = () => {
 
   return (
     <>
-      <section className="section detalji-usluge">
-        <GalerijaVozila
-          slike={vozilo.images}
-          naziv={`${vozilo.brand} ${vozilo.title}`}
-        />
-        <div className="detalji-sadrzaj detalji-vozila">
-          <p className="oznaka-stranice">{vozilo.brand}</p>
-          <h2>{vozilo.title}</h2>
-          <OcjenaVozila vozilo={vozilo} />
-          <CijenaVozila vozilo={vozilo} />
-          <Link className="gumb" to="/kontakt">
-            Pošaljite upit
-          </Link>
-          <p>{vozilo.description}</p>
-          <Link className="povratak-vozila" to="/vozila">
-            Natrag na aute
-          </Link>
-        </div>
-      </section>
+      <GalerijaVozila vozilo={vozilo} />
+      <KalkulatorRata cijena={vozilo.price} />
       <section className="section">
         <h2>Recenzije kupaca</h2>
         <ul className="komentari">

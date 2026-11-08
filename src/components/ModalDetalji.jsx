@@ -1,33 +1,28 @@
 import { Button } from "./Button";
 
-const ModalDetalji = ({ vrsta, detalji, onPromijeniEmail, onZatvori }) => {
+const ModalDetalji = ({
+  vrstaPodatka,
+  detalji,
+  onPromijeniEmail,
+  onZatvori,
+}) => {
   function promijeniEmail() {
     const email = window.prompt("Unesite novu adresu e-pošte:", detalji.email);
     if (email) onPromijeniEmail(email.trim());
   }
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={onZatvori}
-      onKeyDown={(event) => event.key === "Escape" && onZatvori()}
-    >
-      <div
-        className="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="naslov-modala"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <div className="modal-overlay" onClick={onZatvori}>
+      <div className="modal" onClick={(event) => event.stopPropagation()}>
         <div className="modal-zaglavlje">
-          <h2 id="naslov-modala">
-            {vrsta === "users" ? "Detalji zaposlenika" : "Detalji komentara"}
+          <h2>
+            {vrstaPodatka === "users"
+              ? "Detalji zaposlenika"
+              : "Detalji komentara"}
           </h2>
-          <Button autoFocus onClick={onZatvori}>
-            Zatvori
-          </Button>
+          <Button onClick={onZatvori}>Zatvori</Button>
         </div>
-        {vrsta === "users" ? (
+        {vrstaPodatka === "users" ? (
           <div className="modal-sadrzaj">
             <h3>
               {detalji.firstName} {detalji.lastName}
@@ -54,10 +49,10 @@ const ModalDetalji = ({ vrsta, detalji, onPromijeniEmail, onZatvori }) => {
             <h3>{detalji.user.fullName}</h3>
             <p>{detalji.body}</p>
             <p>
-              <strong>Oznaka autora:</strong> {detalji.user.username}
+              <strong>Korisničko ime:</strong> {detalji.user.username}
             </p>
             <p>
-              <strong>Oznake sviđanja:</strong> {detalji.likes}
+              <strong>Broj reakcija:</strong> {detalji.likes}
             </p>
             <p>
               <strong>Povezana objava:</strong> {detalji.postId}

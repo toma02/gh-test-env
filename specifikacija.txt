@@ -1,20 +1,24 @@
-PRED59 - PRETRAŽIVANJE I FILTRIRANJE
+PRED60 - POVEZIVANJE APLIKACIJE
 
 GRADIVO IZ Predavanja.txt
-Reset stanja; pretraživanje podataka; filtriranje liste; interaktivni UI za filtriranje.
+Ideja (blog, todo, katalog, portfolio); skica sučelja i funkcionalnosti; komponente, navigacija, API, stilovi.
 
-ŠTO SE DODAJE U ODNOSU NA PRED58
-Cijeli projekt pred58 ostaje osnova, a CSS pred58 ostaje identičan početak CSS-a pred59.
-Stranica Vozila dobiva stanje filteri s poljima pojam, marka, cijenaOd, cijenaDo, ocjena, popust i redoslijed te konstantu pocetniFilteri. Rezultat nastaje metodama filter i sort pri renderu i ne sprema se u posebno stanje. Objekt poredak čuva funkciju usporedbe za svaki redoslijed. Raspon cijene i redoslijed koriste cijenu s popustom iz cijenaSPopustom, jednaku prikazanoj cijeni. Pretraga ne razlikuje velika i mala slova i traži po marki i modelu. Nakon uspješnog dohvata stranica prikazuje broj pronađenih auta, a kad ih nema i poruku.
-Nova komponenta FilterVozila prima filteri, marke, onPromijeni i onPonisti. U bijelom panelu prikazuje polja za pretragu, cijenu od i do, najmanju ocjenu, najmanji popust i redoslijed, a ispod njih gumbe marki s aria-pressed i gumb Poništite filtre. Odabrana marka koristi klasu gumb, a ostale gumb gumb-povratak.
-Popis marki izvodi se iz dohvaćenih auta pomoću Set.
-Reset stanja vraća pocetniFilteri jednim pozivom setFilteri.
+ŠTO SE DODAJE U ODNOSU NA PRED59
+Cijeli projekt pred59 ostaje osnova, a CSS pred59 ostaje identičan početak CSS-a pred60. Predavanje prolazi put od ideje do gotove funkcionalnosti na primjeru usporedbe auta. Skica je u skica-aplikacije.txt.
+Stranica Vozila dobiva stanje usporedba s odabranim autima i funkciju promijeniUsporedbu, koja auto dodaje ili uklanja. Provjera some() utvrđuje je li auto već odabran, a filter() ga uklanja. Konstanta najviseUsporedbe u src/konstante/index.js ograničava usporedbu na tri auta.
+KarticaVozila uz poveznicu Detalji dobiva gumb Dodajte u usporedbu, odnosno Uklonite iz usporedbe. Kartica prima usporedba i onUsporedi te sama pomoću some() računa je li auto odabran. Odabrani auto dobiva klasu u-usporedbi s plavim obrubom kartice, a gumb Uklonite iz usporedbe klasu gumb-ukloni s tamnom podlogom, dok gumb za dodavanje ostaje svijetli gumb-povratak. Kad su odabrana tri auta, gumb ostalih auta je onemogućen. Iznad sekcije Auti na prodaju, čim su auti dohvaćeni, stoji zasebna sekcija Izdvojeno iz ponude s naslovom, odlomkom i dvije kartice: autom s najboljom ocjenom i najjeftinijim autom. Stranica Vozila pronalazi ih metodom reduce() među svim autima, a ne samo među filtriranima: reduce() prolazi kroz aute i zadržava boljeg od dva uspoređena auta, pa nastaju najboljeOcijenjeno i najjeftinije. U JSX-u se KarticaVozila poziva dvaput, za svaki izdvojeni auto, s istim propsima kao u popisu, pa su kartice potpuno iste kao kartice ispod, s gumbom za usporedbu i bez dodatnih oznaka.
+Ispod filtera stranica prikazuje koliko je auta odabrano i poveznicu Otvorite usporedbu, a kad je usporedba puna i poruku Usporedba je puna. Uklonite auto da biste dodali drugi. Poveznica vodi na #usporedba i pomiče stranicu do sekcije usporedbe ispod auta.
+Nova komponenta UsporedbaVozila prikazuje se ispod kartica čim je odabran barem jedan auto. Tablica koristi samo podatke iz API-ja i jednostavne izračune: za svaki auto prikazuje fotografiju, marku i model, cijenu, mjesečnu ratu za 60 rata bez kamate s najviše dvije decimale, kao u izračunu rata, popust, ocjenu kupaca i težinu te gumb Uklonite. Math.min i Math.max nad map() pronalaze najnižu cijenu, najveći popust i najbolju ocjenu, a ta ćelija dobiva klasu najbolje. Gumb Očistite usporedbu prazni stanje.
+Naslovnica najavljuje motocikle. Kao stranica Vozila, sama dohvaća GET /products/category/motorcycle?limit=4 i ima stanja motocikli, ucitavanje, greska i brojPokusaja te gumb Pokušajte ponovno. Parametar limit=4 traži od API-ja samo četiri motocikla, koji se prikazuju po dva u redu, a svaki prikazuje nova komponenta KarticaMotocikla, kao što KarticaVozila prikazuje auto. Kartice su namjerno drukčije od kartica auta: vodoravne, s fotografijom na svijetloj podlozi i oznakom Uskoro u kutu lijevo te tamnim sadržajem desno, u kojem su marka velikim slovima, naziv i istaknuta očekivana cijena. Gumb Uskoro dostupno ima atribut disabled, pa se ne može kliknuti dok motocikli ne uđu u ponudu.
 
 OGRANIČENJA
-Filtri su samo lokalno stanje: ne čuvaju se u URL-u i vraćaju se na početak pri napuštanju stranice.
+Usporedba je lokalno stanje stranice Vozila i ne čuva se pri napuštanju stranice. Težina je probni podatak API-ja bez navedene jedinice: jedinica t dodana je samo radi prikaza, a vrijednost nije mijenjana. Podatke o potrošnji i brzini API nema.
 
 GLAVNE DATOTEKE
-src/pages/Vozila.jsx; src/components/FilterVozila.jsx; src/style.css.
+src/pages/Vozila.jsx; src/components/KarticaVozila.jsx; src/components/UsporedbaVozila.jsx; src/components/KarticaMotocikla.jsx; src/pages/Naslovnica.jsx; src/konstante/index.js; src/style.css; skica-aplikacije.txt.
+
+GITHUB ACTIONS
+Skripte su iste kao u pred59.
 
 CSS NADOGRADNJA
-Panel filtera ponovno koristi klasu forma za izgled panela, natpisa i polja. Blok PRED59 na kraju dodaje raspored polja i gumba preko flexa te stil padajućih izbora, bez novih media queryja. Gumbi ponovno koriste gumb i gumb-povratak.
+Blok PRED60 na kraju dodaje font gumba, izgled onemogućenog gumba, položaj gumba na dnu kartice auta, razmak sekcije usporedbe ispod ljepljivog zaglavlja te omotač i tablicu usporedbe s vodoravnim pomicanjem na uskom zaslonu, bez novih media queryja. Prvi stupac tablice ima svijetlu podlogu, a najpovoljnija vrijednost u retku podlogu i podebljani tekst. Odabrani auto ima plavi outline kartice i tamni gumb za uklanjanje. Sekcija izdvojenih auta nema vlastiti CSS, nego ponovno koristi kartice i kartice-vozila. Za motocikle blok dodaje klase kartica-motocikla, motocikl-foto, motocikl-oznaka, motocikl-sadrzaj, motocikl-marka i motocikl-cijena: kartica je flex s flex-wrap, pa se fotografija i sadržaj na uskom zaslonu slažu jedno ispod drugoga bez novih media queryja. Oznaka Uskoro apsolutno je pozicionirana u kutu omotača fotografije. Na tamnoj podlozi gumb je proziran s obrubom, a onemogućen koristi isto pravilo .gumb:disabled kao gumbi usporedbe i ne mijenja boju pod mišem. Fotografija u tablici ponovno koristi kartica-slika, marka klasu oznaka, a gumbi gumb i gumb-povratak.

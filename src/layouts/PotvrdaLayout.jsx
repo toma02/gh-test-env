@@ -6,7 +6,7 @@ const PotvrdaLayout = () => {
   return (
     <>
       <Header />
-      <main id="glavni-sadrzaj" className="potvrda-raspored">
+      <main id="glavni-sadrzaj" className="potvrda-layout">
         <Outlet />
       </main>
       <Footer />

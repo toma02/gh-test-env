@@ -11,9 +11,7 @@ const Kartica = ({ stavka, putanja, varijanta = "osnovna" }) => {
         />
       )}
       <div className="kartica-sadrzaj">
-        {stavka.trajanje && (
-          <p className="oznaka-stranice">{stavka.trajanje}</p>
-        )}
+        {stavka.trajanje && <p className="oznaka">{stavka.trajanje}</p>}
         {stavka.naslov && <h3>{stavka.naslov}</h3>}
         <p>{stavka.opis}</p>
         {stavka.cijena && (

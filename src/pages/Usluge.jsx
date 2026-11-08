@@ -1,4 +1,4 @@
-import PozivNaKontakt from "../components/PozivNaKontakt";
+import KontaktCTA from "../components/KontaktCTA";
 import Kartica from "../components/Kartica";
 import { usluge } from "../konstante";
 
@@ -19,7 +19,7 @@ const Usluge = () => {
           ))}
         </div>
       </section>
-      <PozivNaKontakt
+      <KontaktCTA
         naslov="Niste sigurni odakle početi?"
         opis="Javite nam što ste primijetili i pripremit ćemo prijedlog sljedećeg koraka."
       />

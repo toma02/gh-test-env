@@ -9,7 +9,7 @@ const NotFound = ({
   return (
     <section className="section stranica-404">
       <div className="tekst-404">
-        <p className="oznaka-stranice">Izgleda da smo skrenuli s puta</p>
+        <p className="oznaka">Izgleda da smo skrenuli s puta</p>
         <h1>{naslov}</h1>
         <p>
           Ova adresa ne vodi do traženog sadržaja. Vratite se na poznatu

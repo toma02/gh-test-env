@@ -1,6 +1,6 @@
 import Admin from "./pages/Admin.jsx";
 import NotFoundLayout from "./layouts/NotFoundLayout";
-import PotvrdaNovosti from "./pages/PotvrdaNovosti.jsx";
+import Potvrda from "./pages/Potvrda.jsx";
 import { Routes, Route } from "react-router";
 import Layout from "./layouts/Layout.jsx";
 import PotvrdaLayout from "./layouts/PotvrdaLayout.jsx";
@@ -12,7 +12,6 @@ import Vozila from "./pages/Vozila.jsx";
 import DetaljiVozila from "./pages/DetaljiVozila.jsx";
 import NotFound from "./pages/NotFound";
 import ONama from "./pages/ONama.jsx";
-import Potvrda from "./pages/Potvrda.jsx";
 
 export default function App() {
   return (
@@ -29,7 +28,7 @@ export default function App() {
       </Route>
       <Route element={<PotvrdaLayout />}>
         <Route path="/potvrda" element={<Potvrda />} />
-        <Route path="/novosti/potvrda" element={<PotvrdaNovosti />} />
+        <Route path="/novosti/potvrda" element={<Potvrda />} />
       </Route>
       <Route element={<NotFoundLayout />}>
         <Route path="*" element={<NotFound />} />

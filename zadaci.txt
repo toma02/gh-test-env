@@ -1,7 +1,11 @@
 VJEŽBA U POSTOJEĆOJ APLIKACIJI
 
-Na stranici Auti na prodaju dodaj izbor koji ostavlja samo aute s više od 60 komada na zalihi.
+Skiciraj ideju usporedbe auta: napiši što korisnik radi, gdje se prikazuje usporedba, gdje se čuva odabir i koji se podatci uspoređuju.
 
-Dodaj potvrdni okvir Samo Dodge koji na ekranu ostavlja samo aute te marke.
+Iznad popisa auta dodaj sekciju Izdvojeno iz ponude s naslovom, kratkim opisom i dvije kartice: autom s najboljom ocjenom kupaca i najjeftinijim autom. Kartice su iste kao u popisu auta. Na karticama auta dodaj i gumb kojim se auto dodaje u usporedbu ili uklanja iz nje. Kartica odabranog auta ima istaknut obrub, a gumb za uklanjanje izgleda drukčije od gumba za dodavanje. Ispod filtera prikaži koliko je auta odabrano i poveznicu koja spušta stranicu do usporedbe. Kad su odabrana tri auta, ostali auti ne mogu se dodati, a ispod filtera piše da je usporedba puna.
 
-Pored polja za pretragu dodaj mali gumb koji briše samo upisani tekst, a ostale filtre ostavlja kakvi jesu.
+Ispod auta prikaži tablicu usporedbe s fotografijom, markom i modelom, cijenom, mjesečnom ratom za 60 rata, popustom, ocjenom kupaca i težinom. Istakni najnižu cijenu, najveći popust i najbolju ocjenu te dodaj gumbe za uklanjanje jednog auta i čišćenje cijele usporedbe.
+
+Na naslovnici najavi motocikle koji uskoro ulaze u ponudu: prikaži četiri motocikla s API-ja u karticama koje izgledaju drukčije od kartica auta, s oznakom Uskoro, nazivom, markom i očekivanom cijenom te gumbom Uskoro dostupno koji se ne može kliknuti. Potpuno rješenje je implementirano.
+
+Provjeri sekciju izdvojenih auta, dodavanje i uklanjanje auta, ograničenje na tri auta, poveznicu do usporedbe, istaknute vrijednosti, najavu motocikala i mobilni prikaz.

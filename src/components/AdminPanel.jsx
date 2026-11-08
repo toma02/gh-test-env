@@ -3,10 +3,10 @@ import { Button } from "./Button";
 import ModalDetalji from "./ModalDetalji";
 
 const AdminPanel = ({
-  vrsta,
+  vrstaPodatka,
   naslov,
-  stavke,
-  onDetalji,
+  podatci,
+  onPrikaziDetalje,
   onObrisi,
   onPromijeniEmail,
 }) => {
@@ -15,7 +15,7 @@ const AdminPanel = ({
   // Ako zahtjev ne uspije, funkcija na Admin stranici vraća undefined pa se
   // modal zatvara, a poruka pogreške prikazuje se iznad sekcija.
   async function prikaziDetalje(id) {
-    setDetalji(await onDetalji(vrsta, id));
+    setDetalji(await onPrikaziDetalje(vrstaPodatka, id));
   }
 
   async function promijeniEmail(email) {
@@ -23,31 +23,31 @@ const AdminPanel = ({
   }
 
   return (
-    <section className="section admin-sekcija">
+    <div className="admin-panel">
       <div className="admin-zaglavlje">
         <h2>{naslov}</h2>
-        <span className="admin-broj">{stavke.length} zapisa</span>
+        <span className="admin-broj">{podatci.length} zapisa</span>
       </div>
-      <ul className="admin-lista" aria-label={naslov}>
-        {stavke.map((stavka) => (
-          <li key={stavka.id} className="admin-stavka">
+      <ul className="admin-lista">
+        {podatci.map((podatak) => (
+          <li key={podatak.id} className="admin-podatak">
             <div className="admin-tekst">
               <h3>
-                {vrsta === "users"
-                  ? `${stavka.firstName} ${stavka.lastName}`
-                  : stavka.user.fullName}
+                {vrstaPodatka === "users"
+                  ? `${podatak.firstName} ${podatak.lastName}`
+                  : podatak.user.fullName}
               </h3>
-              <p>{vrsta === "users" ? stavka.email : stavka.body}</p>
+              <p>{vrstaPodatka === "users" ? podatak.email : podatak.body}</p>
             </div>
-            <div className="admin-akcije">
-              <Button onClick={() => prikaziDetalje(stavka.id)}>
+            <div className="admin-actions">
+              <Button onClick={() => prikaziDetalje(podatak.id)}>
                 Prikažite detalje
               </Button>
               <Button
                 className="gumb gumb-povratak"
-                onClick={() => onObrisi(vrsta, stavka.id)}
+                onClick={() => onObrisi(vrstaPodatka, podatak.id)}
               >
-                Obrišite
+                Obriši
               </Button>
             </div>
           </li>
@@ -55,13 +55,13 @@ const AdminPanel = ({
       </ul>
       {detalji && (
         <ModalDetalji
-          vrsta={vrsta}
+          vrstaPodatka={vrstaPodatka}
           detalji={detalji}
           onPromijeniEmail={promijeniEmail}
           onZatvori={() => setDetalji(null)}
         />
       )}
-    </section>
+    </div>
   );
 };
 
