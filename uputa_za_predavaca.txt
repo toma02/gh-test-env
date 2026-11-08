@@ -1,23 +1,23 @@
-PRED60 - POVEZIVANJE APLIKACIJE
+PRED61 - VALIDACIJA I KORISNIČKO ISKUSTVO
 
 GRADIVO IZ Predavanja.txt
-Ideja (blog, todo, katalog, portfolio); skica sučelja i funkcionalnosti; komponente, navigacija, API, stilovi.
+Validacija, korisničko iskustvo; prikaz podataka i interaktivnost.
 
 CILJ PREDAVANJA
-Polaznici prolaze cijeli put nove funkcionalnosti: ideja, skica, stanje, komponente, rad s podacima API-ja i stilovi. Važna poruka: najbolje vrijednosti izvode se iz podataka pri svakom renderu i ne spremaju se u novo stanje.
+Polaznici dorađuju postojeću aplikaciju: jasne pogreške uz polja, unaprijed upisan upit, povratne informacije nakon radnje, provjera datuma, rezervacije spremljene u localStorage i graf recenzija s filtriranjem po ocjeni. Važna poruka: poruke pogreške i statistika izvode se iz postojećih podataka pri svakom renderu.
 
 REDOSLIJED RADA I OKVIRNI PLAN ZA ČETIRI SATA
-1. Prvih 60 minuta: usporediti ideje (blog, todo, katalog, portfolio), proći skica-aplikacije.txt i dogovoriti gdje živi stanje usporedba. Na stranici Vozila dodati stanje i promijeniUsporedbu, zatim gumb na KarticaVozila s ograničenjem na tri auta i porukama ispod filtera te sekciju Izdvojeno iz ponude s istim karticama, a izdvojene aute pronaći metodom reduce().
-2. Sljedećih 60 minuta: izraditi UsporedbaVozila ispod kartica s cijenom, mjesečnom ratom, popustom i ocjenom te poveznicu na #usporedba.
-3. Sljedećih 60 minuta: dodati težinu iz API-ja te isticanje najboljih vrijednosti preko Math.min i Math.max.
-4. Zadnjih 60 minuta: CSS tablice s vodoravnim pomicanjem na mobitelu, zatim dohvat motocikala na naslovnici po uzoru na stranicu Vozila (stanja, ponovni pokušaj), parametar limit=4 u adresi API-ja i komponenta KarticaMotocikla s onemogućenim gumbom.
+1. Prvih 60 minuta: u KontaktForma unutar posalji složiti objekt noveGreske, spremiti ga u podatci.greske i uvesti GreskaPolja, zatim aria-invalid, aria-describedby i fokus na prvo neispravno polje. Provjeriti obrazac samo tipkovnicom.
+2. Sljedećih 60 minuta: brojač znakova i iste pogreške uz polja u PretplataForma, zatim Pošaljite upit s detalja auta i iz usporedbe preko state i useLocation te poruka uz učešće u KalkulatorRata.
+3. Sljedećih 60 minuta: RecenzijeVozila s filter i progress, stilom trake te filtriranjem recenzija klikom na ocjenu, zatim RezervacijaTermina s atributima required i min, koja rezervaciju sprema izravno u localStorage, a Admin stranica je odande čita i prikazuje.
+4. Zadnjih 60 minuta: ZaposlenikForma sa salje i potvrda te povratna vrijednost dodajZaposlenika, zatim potvrda brisanja i Prikažite još u AdminPanel.
 Plan je okviran; pauze i tempo objašnjavanja prilagoditi grupi.
 
 PROVJERA
-Provjeriti obrub kartice i tamni gumb Uklonite iz usporedbe kod odabranog auta, sekciju Izdvojeno iz ponude s istim karticama kao u popisu, dodavanje i uklanjanje auta na kartici, onemogućen gumb i poruku pune usporedbe nakon trećeg auta, broj odabranih auta, poveznicu koja spušta do tablice, istaknute najbolje vrijednosti, mjesečnu ratu i težinu, uklanjanje iz tablice, čišćenje usporedbe, vodoravno pomicanje tablice na mobitelu te četiri kartice motocikala na naslovnici s onemogućenim gumbom na računalu i mobitelu.
+Provjeriti pogreške uz svako polje kontaktnog obrasca i prijave na novosti, fokus, brisanje poruke pri ispravku, brojač, upit s detalja auta i iz usporedbe, poruku uz preveliko učešće, trake ocjena i filtriranje recenzija po ocjeni, slanje rezervacije s praznim poljem, onemogućene prošle datume u kalendaru, uspješnu rezervaciju s porukom Termin je rezerviran., popis rezerviranih termina u administraciji i nakon osvježavanja stranice, slanje zaposlenika s uspjehom i pogreškom, odustajanje i potvrdu brisanja te Prikažite još.
 
 OBJAVA
 Skripte se pokreću samo u zasebnom repozitoriju s .github u korijenu. Prije objave u Settings > Pages kao Source odabrati GitHub Actions, inače korak Postavi GitHub Pages završava pogreškom.
 
 PREGLED RAZLIKA
-izmjene_po_datotekama.txt prikazuje aktualni diff prema pred59. Detaljan opis je u specifikacija.txt.
+izmjene_po_datotekama.txt prikazuje aktualni diff prema pred60. Detaljan opis je u specifikacija.txt.

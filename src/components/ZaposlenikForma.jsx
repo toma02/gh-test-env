@@ -1,21 +1,43 @@
 import { useState } from "react";
 import { Button } from "./Button";
 
-const ZaposlenikForma = ({ onDodaj }) => {
-  const [podatci, setPodatci] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
+const pocetniPodatci = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  salje: false,
+  potvrda: "",
+};
 
-  function promijeni(event) {
-    setPodatci({ ...podatci, [event.target.name]: event.target.value });
+const ZaposlenikForma = ({ onDodaj }) => {
+  const [podatci, setPodatci] = useState(pocetniPodatci);
+
+  function promijeniPodatke(event) {
+    setPodatci({
+      ...podatci,
+      [event.target.name]: event.target.value,
+      potvrda: "",
+    });
   }
 
   async function posalji(event) {
     event.preventDefault();
-    await onDodaj(podatci);
-    setPodatci({ firstName: "", lastName: "", email: "" });
+    setPodatci({ ...podatci, salje: true });
+    const uspjeh = await onDodaj({
+      firstName: podatci.firstName,
+      lastName: podatci.lastName,
+      email: podatci.email,
+    });
+
+    // Nakon uspjeha obrazac se prazni, a pri pogrešci upisani podatci ostaju.
+    if (uspjeh) {
+      setPodatci({
+        ...pocetniPodatci,
+        potvrda: `Zaposlenik ${podatci.firstName} ${podatci.lastName} je dodan.`,
+      });
+    } else {
+      setPodatci({ ...podatci, salje: false });
+    }
   }
 
   return (
@@ -32,7 +54,7 @@ const ZaposlenikForma = ({ onDodaj }) => {
           minLength={2}
           required
           value={podatci.firstName}
-          onChange={promijeni}
+          onChange={promijeniPodatke}
         />
         <label htmlFor="zaposlenik-prezime">Prezime</label>
         <input
@@ -41,7 +63,7 @@ const ZaposlenikForma = ({ onDodaj }) => {
           minLength={2}
           required
           value={podatci.lastName}
-          onChange={promijeni}
+          onChange={promijeniPodatke}
         />
         <label htmlFor="zaposlenik-email">Adresa e-pošte</label>
         <input
@@ -50,9 +72,12 @@ const ZaposlenikForma = ({ onDodaj }) => {
           type="email"
           required
           value={podatci.email}
-          onChange={promijeni}
+          onChange={promijeniPodatke}
         />
-        <Button type="submit">Kreirajte zaposlenika</Button>
+        {podatci.potvrda && <p role="status">{podatci.potvrda}</p>}
+        <Button type="submit" disabled={podatci.salje}>
+          {podatci.salje ? "Slanje..." : "Kreirajte zaposlenika"}
+        </Button>
       </form>
     </section>
   );

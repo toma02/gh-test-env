@@ -1,11 +1,19 @@
 VJEŽBA U POSTOJEĆOJ APLIKACIJI
 
-Skiciraj ideju usporedbe auta: napiši što korisnik radi, gdje se prikazuje usporedba, gdje se čuva odabir i koji se podatci uspoređuju.
+U kontaktnom obrascu prikaži poruku odmah ispod svakog neispravnog polja i označi to polje. Nakon slanja fokus prelazi na prvo neispravno polje, a ispravljanje polja uklanja njegovu poruku. Ispod poruke prikaži koliko je znakova upisano od najviše 500.
 
-Iznad popisa auta dodaj sekciju Izdvojeno iz ponude s naslovom, kratkim opisom i dvije kartice: autom s najboljom ocjenom kupaca i najjeftinijim autom. Kartice su iste kao u popisu auta. Na karticama auta dodaj i gumb kojim se auto dodaje u usporedbu ili uklanja iz nje. Kartica odabranog auta ima istaknut obrub, a gumb za uklanjanje izgleda drukčije od gumba za dodavanje. Ispod filtera prikaži koliko je auta odabrano i poveznicu koja spušta stranicu do usporedbe. Kad su odabrana tri auta, ostali auti ne mogu se dodati, a ispod filtera piše da je usporedba puna.
+U obrascu prijave na novosti prikaži zasebnu poruku ispod adrese e-pošte i ispod privole kad nisu ispravne.
 
-Ispod auta prikaži tablicu usporedbe s fotografijom, markom i modelom, cijenom, mjesečnom ratom za 60 rata, popustom, ocjenom kupaca i težinom. Istakni najnižu cijenu, najveći popust i najbolju ocjenu te dodaj gumbe za uklanjanje jednog auta i čišćenje cijele usporedbe.
+Gumb Pošaljite upit na detaljima auta i u usporedbi auta otvara kontaktni obrazac s već upisanom porukom o odabranim autima.
 
-Na naslovnici najavi motocikle koji uskoro ulaze u ponudu: prikaži četiri motocikla s API-ja u karticama koje izgledaju drukčije od kartica auta, s oznakom Uskoro, nazivom, markom i očekivanom cijenom te gumbom Uskoro dostupno koji se ne može kliknuti. Potpuno rješenje je implementirano.
+U izračunu rata prikaži poruku ispod polja kad je učešće veće od cijene auta.
 
-Provjeri sekciju izdvojenih auta, dodavanje i uklanjanje auta, ograničenje na tri auta, poveznicu do usporedbe, istaknute vrijednosti, najavu motocikala i mobilni prikaz.
+Sekciju recenzija auta izdvoji u jednu komponentu. Iznad recenzija za svaku ocjenu od 5 do 1 prikaži zaobljenu traku s brojem recenzija. Klik na ocjenu prikazuje samo recenzije s tom ocjenom, poseban gumb vraća sve recenzije, a kad nema recenzija s odabranom ocjenom prikazuje se poruka.
+
+Na detaljima usluge dodaj rezervaciju termina s imenom i prezimenom, datumom i izborom vremena dolaska. Sva polja su obavezna, a u kalendaru se ne može odabrati datum iz prošlosti. Rezervaciju spremi u localStorage, tako da ostane i nakon osvježavanja stranice, i ispod obrasca napiši da je termin rezerviran. Popis rezerviranih termina prikaži u administraciji.
+
+U obrascu novog zaposlenika onemogući gumb tijekom slanja, nakon uspjeha prikaži potvrdu i isprazni obrazac, a pri pogrešci zadrži upisane podatke.
+
+U administraciji prije brisanja zatraži potvrdu, a u listama prikaži prvih deset zapisa i gumb koji prikazuje još deset. Potpuno rješenje je implementirano.
+
+Provjeri svaku poruku pogreške u svim obrascima, fokus, brojač, upit s detalja i iz usporedbe, poruku uz učešće, raspodjelu i filtriranje recenzija, rezervaciju termina, dodavanje zaposlenika s uspjehom i pogreškom, potvrdu brisanja i prikaz još zapisa.

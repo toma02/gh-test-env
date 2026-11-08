@@ -1216,3 +1216,84 @@ footer {
   border-color: var(--tekst);
   background: var(--tekst);
 }
+
+/* Nadogradnja PRED61: neispravna polja i raspodjela ocjena; paneli ponovno koriste klasu forma. */
+/* PRED61: selektor je jednako jak kao .forma input, a kasnije pravilo pobjeđuje. */
+.forma input[aria-invalid="true"],
+.forma textarea[aria-invalid="true"] {
+  border: 2px solid red;
+}
+
+/* PRED61: retci raspodjele ocjena razmaknuti su jednako kao polja obrasca. */
+.raspodjela-ocjena {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+
+.raspodjela-ocjena li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* PRED61: appearance: none uklanja izgled preglednika, pa traka dobiva vlastitu visinu i zaobljenje. */
+.raspodjela-ocjena progress {
+  flex: 1;
+  height: 14px;
+  appearance: none;
+  border: 1px solid var(--rub);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--svijetla);
+}
+
+/* PRED61: podloga i ispunjeni dio trake; -webkit- vrijedi za Chrome i Safari, -moz- za Firefox. */
+.raspodjela-ocjena progress::-webkit-progress-bar {
+  background: var(--svijetla);
+}
+
+.raspodjela-ocjena progress::-webkit-progress-value {
+  border-radius: 7px;
+  background: var(--tamna);
+}
+
+.raspodjela-ocjena progress::-moz-progress-bar {
+  border-radius: 7px;
+  background: var(--tamna);
+}
+
+/* PRED61: brojevi su iste širine i poravnati desno, pa trake završavaju u istoj točki. */
+.raspodjela-ocjena strong {
+  min-width: 1.5rem;
+  text-align: right;
+  color: var(--tamna);
+}
+
+/* PRED61: polja rezervacije dijele red; prelamaju se kad nema mjesta. */
+.rezervacija-polja {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.rezervacija-polje {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* PRED61: polje datuma i izbornik vremena iste su visine i izgleda. */
+.forma .rezervacija-polje input,
+.rezervacija-polje select {
+  padding: 10px;
+  font: inherit;
+  border: 1px solid var(--rub);
+  border-radius: 5px;
+  color: var(--tekst);
+  background: var(--bijela);
+}

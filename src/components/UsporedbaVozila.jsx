@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Button } from "./Button";
 
 const UsporedbaVozila = ({ usporedba, onUkloni, onOcisti }) => {
@@ -99,6 +100,15 @@ const UsporedbaVozila = ({ usporedba, onUkloni, onOcisti }) => {
         </table>
       </div>
       <div className="actions">
+        <Link
+          className="gumb"
+          to="/kontakt"
+          state={{
+            poruka: `Zanimaju me auti: ${usporedba.map((vozilo) => vozilo.title).join(", ")}. Možete li mi pomoći s odabirom?`,
+          }}
+        >
+          Pošaljite upit
+        </Link>
         <Button className="gumb gumb-povratak" onClick={onOcisti}>
           Očistite usporedbu
         </Button>

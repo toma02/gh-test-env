@@ -32,7 +32,13 @@ const GalerijaVozila = ({ vozilo }) => {
           {vozilo.price.toLocaleString("hr-HR")} €
         </p>
         <div className="actions">
-          <Link className="gumb" to="/kontakt">
+          <Link
+            className="gumb"
+            to="/kontakt"
+            state={{
+              poruka: `Zanima me ${vozilo.brand} ${vozilo.title}. Je li auto još dostupan?`,
+            }}
+          >
             Pošaljite upit
           </Link>
           <Link className="gumb gumb-povratak" to="/vozila">

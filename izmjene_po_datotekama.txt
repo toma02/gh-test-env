@@ -1,10 +1,10 @@
-PRED60 - IZMJENE PO DATOTEKAMA
+PRED61 - IZMJENE PO DATOTEKAMA
 
-Usporedba aktualnog koda pred60 s aktualnim pred59.
+Usporedba aktualnog koda pred61 s aktualnim pred60.
 CSS prethodnog predavanja početak je sljedećeg. + je dodatak, - uklanjanje.
 ISTO označava datoteku koju ne treba ponovno pisati. Dokumentacija i prezentacije nisu dio programskog diffa.
 
-Dodana je usporedba auta na stranici Auti na prodaju: sekcija Izdvojeno iz ponude s autom s najboljom ocjenom i najjeftinijim autom, gumb za usporedbu na kartici, poruke ispod filtera, poveznica do sekcije usporedbe i tablica s cijenom, mjesečnom ratom, popustom, ocjenom i težinom te istaknutim najboljim vrijednostima. Naslovnica najavljuje motocikle u vlastitim karticama s onemogućenim gumbom.
+Dodane su pogreške uz polja kontaktnog obrasca i prijave na novosti, brojač znakova, unaprijed upisan upit s detalja auta i iz usporedbe, poruka uz preveliko učešće, komponenta RecenzijeVozila s grafom ocjena i filtriranjem recenzija, rezervacija termina na detaljima usluge spremljena u localStorage s popisom u administraciji, slanje i potvrda u ZaposlenikForma te potvrda brisanja i Prikažite još u administraciji.
 
 ========================================================================
 ISTO - .github/workflows/deploy.yml
@@ -36,8 +36,8 @@ IZMIJENJENO - package.json
 +++ sada/package.json
 @@ -1,5 +1,5 @@
  {
--  "name": "pred59react",
-+  "name": "pred60react",
+-  "name": "pred60react",
++  "name": "pred61react",
    "private": true,
    "version": "0.0.0",
    "type": "module",
@@ -79,8 +79,59 @@ ISTO - src/assets/servis.jpg
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/components/AdminPanel.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/components/AdminPanel.jsx
+--- prethodno/src/components/AdminPanel.jsx
++++ sada/src/components/AdminPanel.jsx
+@@ -11,11 +11,19 @@
+   onPromijeniEmail,
+ }) => {
+   const [detalji, setDetalji] = useState(null);
++  // Lista prvo prikazuje deset zapisa, a svaki klik dodaje još deset.
++  const [broj, setBroj] = useState(10);
+ 
+   // Ako zahtjev ne uspije, funkcija na Admin stranici vraća undefined pa se
+   // modal zatvara, a poruka pogreške prikazuje se iznad sekcija.
+   async function prikaziDetalje(id) {
+     setDetalji(await onPrikaziDetalje(vrstaPodatka, id));
++  }
++
++  function obrisi(id) {
++    if (window.confirm("Želite li sigurno obrisati ovaj zapis?")) {
++      onObrisi(vrstaPodatka, id);
++    }
+   }
+ 
+   async function promijeniEmail(email) {
+@@ -29,7 +37,7 @@
+         <span className="admin-broj">{podatci.length} zapisa</span>
+       </div>
+       <ul className="admin-lista">
+-        {podatci.map((podatak) => (
++        {podatci.slice(0, broj).map((podatak) => (
+           <li key={podatak.id} className="admin-podatak">
+             <div className="admin-tekst">
+               <h3>
+@@ -45,7 +53,7 @@
+               </Button>
+               <Button
+                 className="gumb gumb-povratak"
+-                onClick={() => onObrisi(vrstaPodatka, podatak.id)}
++                onClick={() => obrisi(podatak.id)}
+               >
+                 Obriši
+               </Button>
+@@ -53,6 +61,11 @@
+           </li>
+         ))}
+       </ul>
++      {broj < podatci.length && (
++        <div className="actions">
++          <Button onClick={() => setBroj(broj + 10)}>Prikažite još</Button>
++        </div>
++      )}
+       {detalji && (
+         <ModalDetalji
+           vrstaPodatka={vrstaPodatka}
 
 ========================================================================
 ISTO - src/components/Button.jsx
@@ -95,8 +146,41 @@ ISTO - src/components/Footer.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/components/GalerijaVozila.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/components/GalerijaVozila.jsx
+--- prethodno/src/components/GalerijaVozila.jsx
++++ sada/src/components/GalerijaVozila.jsx
+@@ -32,7 +32,13 @@
+           {vozilo.price.toLocaleString("hr-HR")} €
+         </p>
+         <div className="actions">
+-          <Link className="gumb" to="/kontakt">
++          <Link
++            className="gumb"
++            to="/kontakt"
++            state={{
++              poruka: `Zanima me ${vozilo.brand} ${vozilo.title}. Je li auto još dostupan?`,
++            }}
++          >
+             Pošaljite upit
+           </Link>
+           <Link className="gumb gumb-povratak" to="/vozila">
+
+========================================================================
+NOVO - src/components/GreskaPolja.jsx
+--- /dev/null
++++ sada/src/components/GreskaPolja.jsx
+@@ -0,0 +1,11 @@
++const GreskaPolja = ({ id, poruka }) => {
++  if (!poruka) return null;
++
++  return (
++    <p id={id} className="greska" role="alert">
++      {poruka}
++    </p>
++  );
++};
++
++export default GreskaPolja;
 
 ========================================================================
 ISTO - src/components/Header.jsx
@@ -107,93 +191,48 @@ ISTO - src/components/HeroSekcija.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/components/KalkulatorRata.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/components/KalkulatorRata.jsx
+--- prethodno/src/components/KalkulatorRata.jsx
++++ sada/src/components/KalkulatorRata.jsx
+@@ -1,4 +1,5 @@
+ import { useState } from "react";
++import GreskaPolja from "./GreskaPolja";
+ 
+ const brojeviRata = [12, 24, 36, 48, 60];
+ 
+@@ -9,6 +10,8 @@
+   const [ucesce, setUcesce] = useState("");
+   // Iznos ne smije pasti ispod nule kad je učešće veće od cijene.
+   const iznos = Math.max(cijena - Number(ucesce), 0);
++  const greska =
++    Number(ucesce) > cijena ? "Učešće ne može biti veće od cijene auta." : "";
+ 
+   return (
+     <section className="section">
+@@ -21,8 +24,11 @@
+             type="number"
+             min="0"
+             value={ucesce}
++            aria-invalid={Boolean(greska)}
++            aria-describedby="greska-ucesca"
+             onChange={(event) => setUcesce(event.target.value)}
+           />
++          <GreskaPolja id="greska-ucesca" poruka={greska} />
+           <p className="iznos-otplate">Iznos za otplatu</p>
+           <p className="cijena-usluge">{prikaziIznos(iznos)}</p>
+         </div>
 
 ========================================================================
 ISTO - src/components/Kartica.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-NOVO - src/components/KarticaMotocikla.jsx
---- /dev/null
-+++ sada/src/components/KarticaMotocikla.jsx
-@@ -0,0 +1,26 @@
-+import { Button } from "./Button";
-+
-+const KarticaMotocikla = ({ motocikl }) => {
-+  return (
-+    <div className="kartica-motocikla">
-+      <div className="motocikl-foto">
-+        <span className="motocikl-oznaka">Uskoro</span>
-+        <img src={motocikl.thumbnail} alt={motocikl.title} />
-+      </div>
-+      <div className="motocikl-sadrzaj">
-+        <p className="motocikl-marka">{motocikl.brand}</p>
-+        <h3>{motocikl.title}</h3>
-+        <p>Očekivana cijena</p>
-+        <p className="motocikl-cijena">
-+          {motocikl.price.toLocaleString("hr-HR")} €
-+        </p>
-+        {/* Gumb je onemogućen dok motocikli ne uđu u ponudu. */}
-+        <Button className="gumb gumb-povratak" disabled>
-+          Uskoro dostupno
-+        </Button>
-+      </div>
-+    </div>
-+  );
-+};
-+
-+export default KarticaMotocikla;
+ISTO - src/components/KarticaMotocikla.jsx
+Identično prethodnom predavanju.
 
 ========================================================================
-IZMIJENJENO - src/components/KarticaVozila.jsx
---- prethodno/src/components/KarticaVozila.jsx
-+++ sada/src/components/KarticaVozila.jsx
-@@ -1,8 +1,18 @@
- import { Link } from "react-router";
-+import { Button } from "./Button";
-+import { najviseUsporedbe } from "../konstante";
-+
-+const KarticaVozila = ({ vozilo, usporedba, onUsporedi }) => {
-+  const uUsporedbi = usporedba.some((odabrano) => odabrano.id === vozilo.id);
- 
--const KarticaVozila = ({ vozilo }) => {
-   return (
--    <div className="kartica kartica-usluga">
-+    <div
-+      className={
-+        uUsporedbi
-+          ? "kartica kartica-usluga u-usporedbi"
-+          : "kartica kartica-usluga"
-+      }
-+    >
-       <img
-         className="kartica-slika"
-         src={vozilo.thumbnail}
-@@ -15,9 +25,19 @@
-         <p className="cijena-kartice">
-           {vozilo.price.toLocaleString("hr-HR")} €
-         </p>
--        <Link className="gumb" to={`/vozila/${vozilo.id}`}>
--          Detalji
--        </Link>
-+        <div className="actions">
-+          <Link className="gumb" to={`/vozila/${vozilo.id}`}>
-+            Detalji
-+          </Link>
-+          {/* Odabrani auto ima tamni gumb za uklanjanje, a ostali svijetli gumb za dodavanje. */}
-+          <Button
-+            className={uUsporedbi ? "gumb gumb-ukloni" : "gumb gumb-povratak"}
-+            disabled={usporedba.length === najviseUsporedbe && !uUsporedbi}
-+            onClick={() => onUsporedi(vozilo)}
-+          >
-+            {uUsporedbi ? "Uklonite iz usporedbe" : "Dodajte u usporedbu"}
-+          </Button>
-+        </div>
-       </div>
-     </div>
-   );
+ISTO - src/components/KarticaVozila.jsx
+Identično prethodnom predavanju.
 
 ========================================================================
 ISTO - src/components/KomentarVozila.jsx
@@ -204,151 +243,493 @@ ISTO - src/components/KontaktCTA.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/components/KontaktForma.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/components/KontaktForma.jsx
+--- prethodno/src/components/KontaktForma.jsx
++++ sada/src/components/KontaktForma.jsx
+@@ -1,50 +1,53 @@
+ import { useState } from "react";
+-import { useNavigate } from "react-router";
++import { useLocation, useNavigate } from "react-router";
+ import { Button } from "./Button";
++import GreskaPolja from "./GreskaPolja";
++
++const najviseZnakova = 500;
+ 
+ const KontaktForma = () => {
+   const navigate = useNavigate();
++  // Detalji i usporedba auta šalju gotov tekst upita kroz state poveznice.
++  const { state } = useLocation();
+   const [podatci, setPodatci] = useState({
+     ime: "",
+     email: "",
+-    poruka: "",
+-    greska: "",
++    poruka: state?.poruka ?? "",
++    greske: {},
+   });
+ 
+   function promijeniPodatke(e) {
++    // Ispravljanje polja briše samo poruku pogreške tog polja.
+     setPodatci({
+       ...podatci,
+       [e.target.name]: e.target.value,
+-      greska: "",
++      greske: { ...podatci.greske, [e.target.name]: "" },
+     });
+   }
+ 
+   function posalji(e) {
+     e.preventDefault();
++    const noveGreske = {};
+ 
+     if (podatci.ime.trim().length < 2) {
+-      setPodatci({
+-        ...podatci,
+-        greska: "Upišite valjano ime. Ime mora imati barem 2 znaka.",
+-      });
+-
+-      return;
++      noveGreske.ime = "Upišite valjano ime. Ime mora imati barem 2 znaka.";
+     }
+ 
+     if (!/^[\w.-]+@[\w.-]+\.\w{2,4}$/.test(podatci.email.trim())) {
+-      setPodatci({
+-        ...podatci,
+-        greska: "Upišite valjanu adresu e-pošte.",
+-      });
+-
+-      return;
++      noveGreske.email = "Upišite valjanu adresu e-pošte.";
+     }
+ 
+     if (podatci.poruka.trim().length < 10) {
+-      setPodatci({
+-        ...podatci,
+-        greska: "Upišite valjanu poruku. Poruka mora imati barem 10 znakova.",
+-      });
++      noveGreske.poruka =
++        "Upišite valjanu poruku. Poruka mora imati barem 10 znakova.";
++    }
++
++    const neispravnaPolja = Object.keys(noveGreske);
++
++    if (neispravnaPolja.length > 0) {
++      setPodatci({ ...podatci, greske: noveGreske });
++      // ID svakog polja jednak je njegovu nazivu.
++      document.getElementById(neispravnaPolja[0]).focus();
+ 
+       return;
+     }
+@@ -60,29 +63,37 @@
+         name="ime"
+         value={podatci.ime}
+         type="text"
++        aria-invalid={Boolean(podatci.greske.ime)}
++        aria-describedby="greska-ime"
+         onChange={promijeniPodatke}
+       />
++      <GreskaPolja id="greska-ime" poruka={podatci.greske.ime} />
+       <label htmlFor="email">Adresa e-pošte</label>
+       <input
+         id="email"
+         name="email"
+         value={podatci.email}
+         type="email"
++        aria-invalid={Boolean(podatci.greske.email)}
++        aria-describedby="greska-email"
+         onChange={promijeniPodatke}
+       />
++      <GreskaPolja id="greska-email" poruka={podatci.greske.email} />
+       <label htmlFor="poruka">Poruka</label>
+       <textarea
+         id="poruka"
+         name="poruka"
+         rows="5"
++        maxLength={najviseZnakova}
+         value={podatci.poruka}
++        aria-invalid={Boolean(podatci.greske.poruka)}
++        aria-describedby="brojac-poruke greska-poruka"
+         onChange={promijeniPodatke}
+       ></textarea>
+-      {podatci.greska && (
+-        <p className="greska" role="alert">
+-          {podatci.greska}
+-        </p>
+-      )}
++      <p id="brojac-poruke">
++        {podatci.poruka.length} / {najviseZnakova} znakova
++      </p>
++      <GreskaPolja id="greska-poruka" poruka={podatci.greske.poruka} />
+       <Button type="submit">Pošaljite poruku</Button>
+     </form>
+   );
 
 ========================================================================
 ISTO - src/components/ModalDetalji.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/components/PretplataForma.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/components/PretplataForma.jsx
+--- prethodno/src/components/PretplataForma.jsx
++++ sada/src/components/PretplataForma.jsx
+@@ -1,34 +1,38 @@
+ import { useState } from "react";
+ import { useNavigate } from "react-router";
+ import { Button } from "./Button";
++import GreskaPolja from "./GreskaPolja";
+ 
+ const PretplataForma = () => {
+   const navigate = useNavigate();
+   const [podatci, setPodatci] = useState({
+     email: "",
+     privola: false,
+-    obavijest: "",
++    greske: {},
+   });
+ 
+   function promijeniPodatke(naziv, vrijednost) {
+     setPodatci({
+       ...podatci,
+       [naziv]: vrijednost,
+-      obavijest: "",
++      greske: { ...podatci.greske, [naziv]: "" },
+     });
+   }
+ 
+   function posalji(e) {
+     e.preventDefault();
++    const noveGreske = {};
+ 
+-    if (
+-      !/^[\w.-]+@[\w.-]+\.\w{2,4}$/.test(podatci.email.trim()) ||
+-      !podatci.privola
+-    ) {
+-      setPodatci({
+-        ...podatci,
+-        obavijest: `Upišite valjanu adresu e-pošte i potvrdite privolu.`,
+-      });
++    if (!/^[\w.-]+@[\w.-]+\.\w{2,4}$/.test(podatci.email.trim())) {
++      noveGreske.email = "Upišite valjanu adresu e-pošte.";
++    }
++
++    if (!podatci.privola) {
++      noveGreske.privola = "Potvrdite da želite primati novosti.";
++    }
++
++    if (Object.keys(noveGreske).length > 0) {
++      setPodatci({ ...podatci, greske: noveGreske });
+       return;
+     }
+ 
+@@ -43,19 +47,24 @@
+         name="email"
+         value={podatci.email}
+         type="email"
++        aria-invalid={Boolean(podatci.greske.email)}
++        aria-describedby="greska-email-novosti"
+         onChange={(e) => promijeniPodatke(e.target.name, e.target.value)}
+       />
++      <GreskaPolja id="greska-email-novosti" poruka={podatci.greske.email} />
+       <label htmlFor="privola" className="privola">
+         <input
+           id="privola"
+           type="checkbox"
+           name="privola"
+           checked={podatci.privola}
++          aria-invalid={Boolean(podatci.greske.privola)}
++          aria-describedby="greska-privola"
+           onChange={(e) => promijeniPodatke(e.target.name, e.target.checked)}
+         />
+         Želim primati novosti o uslugama autoservisa
+       </label>
+-      {podatci.obavijest && <p role="status">{podatci.obavijest}</p>}
++      <GreskaPolja id="greska-privola" poruka={podatci.greske.privola} />
+       <Button type="submit">Prijavite se na novosti</Button>
+     </form>
+   );
 
 ========================================================================
-NOVO - src/components/UsporedbaVozila.jsx
+NOVO - src/components/RecenzijeVozila.jsx
 --- /dev/null
-+++ sada/src/components/UsporedbaVozila.jsx
-@@ -0,0 +1,110 @@
++++ sada/src/components/RecenzijeVozila.jsx
+@@ -0,0 +1,68 @@
++import { useState } from "react";
 +import { Button } from "./Button";
++import KomentarVozila from "./KomentarVozila";
 +
-+const UsporedbaVozila = ({ usporedba, onUkloni, onOcisti }) => {
-+  // Najbolje vrijednosti računaju se iz odabranih auta pri svakom renderu.
-+  const najnizaCijena = Math.min(...usporedba.map((vozilo) => vozilo.price));
-+  const najveciPopust = Math.max(
-+    ...usporedba.map((vozilo) => vozilo.discountPercentage),
-+  );
-+  const najboljaOcjena = Math.max(...usporedba.map((vozilo) => vozilo.rating));
++const ocjene = [5, 4, 3, 2, 1];
++
++const RecenzijeVozila = ({ recenzije }) => {
++  // Dok ocjena nije odabrana (null), prikazuju se recenzije sa svim ocjenama.
++  const [odabranaOcjena, setOdabranaOcjena] = useState(null);
++
++  const prikazaneRecenzije = odabranaOcjena
++    ? recenzije.filter((recenzija) => recenzija.rating === odabranaOcjena)
++    : recenzije;
 +
 +  return (
-+    <section id="usporedba" className="section usporedba-vozila">
-+      <h2>Usporedba odabranih auta</h2>
-+      <p>Istaknute su najpovoljnije vrijednosti u svakom retku.</p>
-+      <div className="usporedba-omotac">
-+        <table className="tablica-usporedbe">
-+          <thead>
-+            <tr>
-+              <th></th>
-+              {usporedba.map((vozilo) => (
-+                <th key={vozilo.id}>
-+                  <img
-+                    className="kartica-slika"
-+                    src={vozilo.thumbnail}
-+                    alt={vozilo.title}
-+                  />
-+                  <p className="oznaka">{vozilo.brand}</p>
-+                  {vozilo.title}
-+                </th>
-+              ))}
-+            </tr>
-+          </thead>
-+          <tbody>
-+            <tr>
-+              <th>Cijena</th>
-+              {usporedba.map((vozilo) => (
-+                <td
-+                  key={vozilo.id}
-+                  className={vozilo.price === najnizaCijena ? "najbolje" : ""}
-+                >
-+                  {vozilo.price.toLocaleString("hr-HR")} €
-+                </td>
-+              ))}
-+            </tr>
-+            <tr>
-+              <th>Mjesečna rata (60 rata)</th>
-+              {usporedba.map((vozilo) => (
-+                <td key={vozilo.id}>
-+                  {`${(vozilo.price / 60).toLocaleString("hr-HR", { maximumFractionDigits: 2 })} €`}
-+                </td>
-+              ))}
-+            </tr>
-+            <tr>
-+              <th>Popust</th>
-+              {usporedba.map((vozilo) => (
-+                <td
-+                  key={vozilo.id}
++    <section className="section">
++      <h2>Recenzije kupaca</h2>
++      <div className="forma">
++        <ul className="raspodjela-ocjena">
++          {ocjene.map((ocjena) => {
++            const brojRecenzija = recenzije.filter(
++              (recenzija) => recenzija.rating === ocjena,
++            ).length;
++
++            return (
++              <li key={ocjena}>
++                {/* Klik na ocjenu prikazuje samo recenzije s tom ocjenom. */}
++                <Button
 +                  className={
-+                    vozilo.discountPercentage === najveciPopust
-+                      ? "najbolje"
-+                      : ""
++                    odabranaOcjena === ocjena ? "gumb" : "gumb gumb-povratak"
 +                  }
++                  onClick={() => setOdabranaOcjena(ocjena)}
 +                >
-+                  {vozilo.discountPercentage} %
-+                </td>
-+              ))}
-+            </tr>
-+            <tr>
-+              <th>Ocjena kupaca</th>
-+              {usporedba.map((vozilo) => (
-+                <td
-+                  key={vozilo.id}
-+                  className={vozilo.rating === najboljaOcjena ? "najbolje" : ""}
-+                >
-+                  {vozilo.rating} / 5
-+                </td>
-+              ))}
-+            </tr>
-+            <tr>
-+              <th>Težina</th>
-+              {usporedba.map((vozilo) => (
-+                <td key={vozilo.id}>{vozilo.weight} t</td>
-+              ))}
-+            </tr>
-+            <tr>
-+              <th></th>
-+              {usporedba.map((vozilo) => (
-+                <td key={vozilo.id}>
-+                  <Button
-+                    className="gumb gumb-povratak"
-+                    onClick={() => onUkloni(vozilo)}
-+                  >
-+                    Uklonite
-+                  </Button>
-+                </td>
-+              ))}
-+            </tr>
-+          </tbody>
-+        </table>
-+      </div>
-+      <div className="actions">
-+        <Button className="gumb gumb-povratak" onClick={onOcisti}>
-+          Očistite usporedbu
++                  Ocjena {ocjena}
++                </Button>
++                <progress
++                  max={recenzije.length}
++                  value={brojRecenzija}
++                ></progress>
++                <strong>{brojRecenzija}</strong>
++              </li>
++            );
++          })}
++        </ul>
++        <Button
++          className="gumb gumb-povratak"
++          onClick={() => setOdabranaOcjena(null)}
++        >
++          Prikažite sve recenzije
 +        </Button>
 +      </div>
++      {odabranaOcjena && (
++        <p>
++          {prikazaneRecenzije.length > 0
++            ? `Prikazane su recenzije s ocjenom ${odabranaOcjena}: ${prikazaneRecenzije.length}.`
++            : "Nema recenzija s odabranom ocjenom."}
++        </p>
++      )}
++      <ul className="komentari">
++        {prikazaneRecenzije.map((recenzija) => (
++          <KomentarVozila key={recenzija.reviewerEmail} recenzija={recenzija} />
++        ))}
++      </ul>
 +    </section>
 +  );
 +};
 +
-+export default UsporedbaVozila;
++export default RecenzijeVozila;
 
 ========================================================================
-ISTO - src/components/ZaposlenikForma.jsx
-Identično prethodnom predavanju.
-
-========================================================================
-IZMIJENJENO - src/konstante/index.js
---- prethodno/src/konstante/index.js
-+++ sada/src/konstante/index.js
-@@ -1,6 +1,9 @@
- import slikaServisa from "../assets/servis.jpg";
- import slikaKocnica from "../assets/kocnice.jpg";
- import slikaDijagnostike from "../assets/dijagnostika.jpg";
+NOVO - src/components/RezervacijaTermina.jsx
+--- /dev/null
++++ sada/src/components/RezervacijaTermina.jsx
+@@ -0,0 +1,82 @@
++import { useState } from "react";
++import { Button } from "./Button";
 +
-+// Više od tri auta ne stane pregledno u tablicu usporedbe.
-+export const najviseUsporedbe = 3;
++const termini = ["08:00", "10:00", "12:00", "14:00"];
++
++// Polje datuma traži zapis GGGG-MM-DD, pa se uzima prvih 10 znakova današnjeg datuma.
++const danas = new Date().toISOString().slice(0, 10);
++
++const RezervacijaTermina = ({ usluga }) => {
++  const [podatci, setPodatci] = useState({ ime: "", datum: "", vrijeme: "" });
++  const [rezervirano, setRezervirano] = useState(false);
++
++  function promijeniPodatke(e) {
++    setPodatci({ ...podatci, [e.target.name]: e.target.value });
++  }
++
++  function posalji(e) {
++    e.preventDefault();
++    // Nova rezervacija dodaje se postojećima u localStorage, a čita ih stranica administracije.
++    const rezervacije = JSON.parse(localStorage.getItem("rezervacije")) || [];
++    rezervacije.push({ ...podatci, id: Date.now(), usluga: usluga.naslov });
++    localStorage.setItem("rezervacije", JSON.stringify(rezervacije));
++    setPodatci({ ime: "", datum: "", vrijeme: "" });
++    setRezervirano(true);
++  }
++
++  return (
++    <section className="section">
++      <h2>Rezervirajte termin</h2>
++      {/* required i min provjerava preglednik prije slanja obrasca. */}
++      <form className="forma" onSubmit={posalji}>
++        <div className="rezervacija-polja">
++          <div className="rezervacija-polje">
++            <label htmlFor="ime-rezervacija">Ime i prezime</label>
++            <input
++              id="ime-rezervacija"
++              name="ime"
++              type="text"
++              required
++              value={podatci.ime}
++              onChange={promijeniPodatke}
++            />
++          </div>
++          <div className="rezervacija-polje">
++            <label htmlFor="datum">Datum dolaska</label>
++            {/* min onemogućuje odabir datuma iz prošlosti u kalendaru. */}
++            <input
++              id="datum"
++              name="datum"
++              type="date"
++              required
++              min={danas}
++              value={podatci.datum}
++              onChange={promijeniPodatke}
++            />
++          </div>
++          <div className="rezervacija-polje">
++            <label htmlFor="vrijeme">Vrijeme dolaska</label>
++            <select
++              id="vrijeme"
++              name="vrijeme"
++              required
++              value={podatci.vrijeme}
++              onChange={promijeniPodatke}
++            >
++              <option value="">Odaberite vrijeme</option>
++              {termini.map((termin) => (
++                <option key={termin} value={termin}>
++                  {termin}
++                </option>
++              ))}
++            </select>
++          </div>
++        </div>
++        <Button type="submit">Rezervirajte termin</Button>
++        {rezervirano && <p>Termin je rezerviran.</p>}
++      </form>
++    </section>
++  );
++};
++
++export default RezervacijaTermina;
+
+========================================================================
+IZMIJENJENO - src/components/UsporedbaVozila.jsx
+--- prethodno/src/components/UsporedbaVozila.jsx
++++ sada/src/components/UsporedbaVozila.jsx
+@@ -1,3 +1,4 @@
++import { Link } from "react-router";
+ import { Button } from "./Button";
  
- export const kategorije = [
-   {
+ const UsporedbaVozila = ({ usporedba, onUkloni, onOcisti }) => {
+@@ -99,6 +100,15 @@
+         </table>
+       </div>
+       <div className="actions">
++        <Link
++          className="gumb"
++          to="/kontakt"
++          state={{
++            poruka: `Zanimaju me auti: ${usporedba.map((vozilo) => vozilo.title).join(", ")}. Možete li mi pomoći s odabirom?`,
++          }}
++        >
++          Pošaljite upit
++        </Link>
+         <Button className="gumb gumb-povratak" onClick={onOcisti}>
+           Očistite usporedbu
+         </Button>
+
+========================================================================
+IZMIJENJENO - src/components/ZaposlenikForma.jsx
+--- prethodno/src/components/ZaposlenikForma.jsx
++++ sada/src/components/ZaposlenikForma.jsx
+@@ -1,21 +1,43 @@
+ import { useState } from "react";
+ import { Button } from "./Button";
+ 
++const pocetniPodatci = {
++  firstName: "",
++  lastName: "",
++  email: "",
++  salje: false,
++  potvrda: "",
++};
++
+ const ZaposlenikForma = ({ onDodaj }) => {
+-  const [podatci, setPodatci] = useState({
+-    firstName: "",
+-    lastName: "",
+-    email: "",
+-  });
++  const [podatci, setPodatci] = useState(pocetniPodatci);
+ 
+-  function promijeni(event) {
+-    setPodatci({ ...podatci, [event.target.name]: event.target.value });
++  function promijeniPodatke(event) {
++    setPodatci({
++      ...podatci,
++      [event.target.name]: event.target.value,
++      potvrda: "",
++    });
+   }
+ 
+   async function posalji(event) {
+     event.preventDefault();
+-    await onDodaj(podatci);
+-    setPodatci({ firstName: "", lastName: "", email: "" });
++    setPodatci({ ...podatci, salje: true });
++    const uspjeh = await onDodaj({
++      firstName: podatci.firstName,
++      lastName: podatci.lastName,
++      email: podatci.email,
++    });
++
++    // Nakon uspjeha obrazac se prazni, a pri pogrešci upisani podatci ostaju.
++    if (uspjeh) {
++      setPodatci({
++        ...pocetniPodatci,
++        potvrda: `Zaposlenik ${podatci.firstName} ${podatci.lastName} je dodan.`,
++      });
++    } else {
++      setPodatci({ ...podatci, salje: false });
++    }
+   }
+ 
+   return (
+@@ -32,7 +54,7 @@
+           minLength={2}
+           required
+           value={podatci.firstName}
+-          onChange={promijeni}
++          onChange={promijeniPodatke}
+         />
+         <label htmlFor="zaposlenik-prezime">Prezime</label>
+         <input
+@@ -41,7 +63,7 @@
+           minLength={2}
+           required
+           value={podatci.lastName}
+-          onChange={promijeni}
++          onChange={promijeniPodatke}
+         />
+         <label htmlFor="zaposlenik-email">Adresa e-pošte</label>
+         <input
+@@ -50,9 +72,12 @@
+           type="email"
+           required
+           value={podatci.email}
+-          onChange={promijeni}
++          onChange={promijeniPodatke}
+         />
+-        <Button type="submit">Kreirajte zaposlenika</Button>
++        {podatci.potvrda && <p role="status">{podatci.potvrda}</p>}
++        <Button type="submit" disabled={podatci.salje}>
++          {podatci.salje ? "Slanje..." : "Kreirajte zaposlenika"}
++        </Button>
+       </form>
+     </section>
+   );
+
+========================================================================
+ISTO - src/konstante/index.js
+Identično prethodnom predavanju.
 
 ========================================================================
 ISTO - src/layouts/Layout.jsx
@@ -367,95 +748,178 @@ ISTO - src/main.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-ISTO - src/pages/Admin.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/pages/Admin.jsx
+--- prethodno/src/pages/Admin.jsx
++++ sada/src/pages/Admin.jsx
+@@ -4,6 +4,8 @@
+ import { apiRequest } from "../api";
+ 
+ const Admin = () => {
++  // Rezervacije sprema obrazac na stranici usluge, a ovdje se samo čitaju iz localStorage.
++  const rezervacije = JSON.parse(localStorage.getItem("rezervacije")) || [];
+   const [zaposlenici, setZaposlenici] = useState([]);
+   const [komentari, setKomentari] = useState([]);
+   const [greska, setGreska] = useState("");
+@@ -83,8 +85,10 @@
+         { ...zaposlenik, id: Date.now() },
+         ...zaposlenici,
+       ]);
++      return true;
+     } catch {
+       setGreska("Dodavanje zaposlenika nije uspjelo. Pokušajte ponovno.");
++      return false;
+     }
+   }
+ 
+@@ -113,6 +117,29 @@
+           />
+         </div>
+       </section>
++      <section className="section">
++        <div className="admin-panel">
++          <div className="admin-zaglavlje">
++            <h2>Rezervirani termini</h2>
++            <span className="admin-broj">{rezervacije.length} zapisa</span>
++          </div>
++          {rezervacije.length === 0 && <p>Još nema rezerviranih termina.</p>}
++          <ul className="admin-lista">
++            {rezervacije.map((rezervacija) => (
++              <li key={rezervacija.id} className="admin-podatak">
++                <div className="admin-tekst">
++                  <h3>{rezervacija.ime}</h3>
++                  <p>
++                    {rezervacija.usluga},{" "}
++                    {new Date(rezervacija.datum).toLocaleDateString("hr-HR")} u{" "}
++                    {rezervacija.vrijeme}
++                  </p>
++                </div>
++              </li>
++            ))}
++          </ul>
++        </div>
++      </section>
+       <ZaposlenikForma onDodaj={dodajZaposlenika} />
+     </>
+   );
 
 ========================================================================
-ISTO - src/pages/DetaljiUsluge.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/pages/DetaljiUsluge.jsx
+--- prethodno/src/pages/DetaljiUsluge.jsx
++++ sada/src/pages/DetaljiUsluge.jsx
+@@ -1,6 +1,7 @@
+ import { useParams, Link } from "react-router";
+ import { usluge } from "../konstante";
+ import NotFound from "./NotFound";
++import RezervacijaTermina from "../components/RezervacijaTermina";
+ 
+ const DetaljiUsluge = () => {
+   const { id } = useParams();
+@@ -16,34 +17,37 @@
+     );
+ 
+   return (
+-    <section className="section detalji-usluge">
+-      <div className="detalji-slika">
+-        <img
+-          className="slika-usluge"
+-          src={usluga.slika}
+-          alt={usluga.opisSlike}
+-        />
+-      </div>
+-      <div className="detalji-sadrzaj">
+-        <p className="oznaka">{usluga.trajanje}</p>
+-        <h2>{usluga.naslov}</h2>
+-        <h3>Što obuhvaća usluga?</h3>
+-        <p>{usluga.opis}</p>
+-        <p className="cijena-usluge">{usluga.cijena} €</p>
+-        <p>
+-          Cijena je okvirna. Točan iznos ovisi o vozilu i potrebnim dijelovima,
+-          a dogovaramo ga prije početka radova.
+-        </p>
+-        <div className="actions">
+-          <Link className="gumb" to="/kontakt">
+-            Pošaljite upit
+-          </Link>
+-          <Link className="gumb gumb-povratak" to="/usluge">
+-            Natrag na usluge
+-          </Link>
++    <>
++      <section className="section detalji-usluge">
++        <div className="detalji-slika">
++          <img
++            className="slika-usluge"
++            src={usluga.slika}
++            alt={usluga.opisSlike}
++          />
+         </div>
+-      </div>
+-    </section>
++        <div className="detalji-sadrzaj">
++          <p className="oznaka">{usluga.trajanje}</p>
++          <h2>{usluga.naslov}</h2>
++          <h3>Što obuhvaća usluga?</h3>
++          <p>{usluga.opis}</p>
++          <p className="cijena-usluge">{usluga.cijena} €</p>
++          <p>
++            Cijena je okvirna. Točan iznos ovisi o vozilu i potrebnim
++            dijelovima, a dogovaramo ga prije početka radova.
++          </p>
++          <div className="actions">
++            <Link className="gumb" to="/kontakt">
++              Pošaljite upit
++            </Link>
++            <Link className="gumb gumb-povratak" to="/usluge">
++              Natrag na usluge
++            </Link>
++          </div>
++        </div>
++      </section>
++      <RezervacijaTermina usluga={usluga} />
++    </>
+   );
+ };
+ 
 
 ========================================================================
-ISTO - src/pages/DetaljiVozila.jsx
-Identično prethodnom predavanju.
+IZMIJENJENO - src/pages/DetaljiVozila.jsx
+--- prethodno/src/pages/DetaljiVozila.jsx
++++ sada/src/pages/DetaljiVozila.jsx
+@@ -3,7 +3,7 @@
+ import NotFound from "./NotFound";
+ import GalerijaVozila from "../components/GalerijaVozila";
+ import KalkulatorRata from "../components/KalkulatorRata";
+-import KomentarVozila from "../components/KomentarVozila";
++import RecenzijeVozila from "../components/RecenzijeVozila";
+ import { apiRequest } from "../api";
+ 
+ const DetaljiVozila = () => {
+@@ -44,17 +44,7 @@
+     <>
+       <GalerijaVozila vozilo={vozilo} />
+       <KalkulatorRata cijena={vozilo.price} />
+-      <section className="section">
+-        <h2>Recenzije kupaca</h2>
+-        <ul className="komentari">
+-          {vozilo.reviews.map((recenzija) => (
+-            <KomentarVozila
+-              key={recenzija.reviewerEmail}
+-              recenzija={recenzija}
+-            />
+-          ))}
+-        </ul>
+-      </section>
++      <RecenzijeVozila recenzije={vozilo.reviews} />
+     </>
+   );
+ };
 
 ========================================================================
 ISTO - src/pages/Kontakt.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-IZMIJENJENO - src/pages/Naslovnica.jsx
---- prethodno/src/pages/Naslovnica.jsx
-+++ sada/src/pages/Naslovnica.jsx
-@@ -1,9 +1,42 @@
-+import { useEffect, useState } from "react";
- import KontaktCTA from "../components/KontaktCTA";
- import { Link } from "react-router";
-+import { Button } from "../components/Button";
- import Kartica from "../components/Kartica";
-+import KarticaMotocikla from "../components/KarticaMotocikla";
- import { kategorije } from "../konstante";
-+import { apiRequest } from "../api";
- 
- const Naslovnica = () => {
-+  const [motocikli, setMotocikli] = useState([]);
-+  const [ucitavanje, setUcitavanje] = useState(true);
-+  const [greska, setGreska] = useState("");
-+  const [brojPokusaja, setBrojPokusaja] = useState(0);
-+
-+  // Motocikli se dohvaćaju isto kao auti na stranici Vozila.
-+  // limit=4 traži od API-ja samo četiri motocikla.
-+  useEffect(() => {
-+    async function dohvatiPodatke() {
-+      try {
-+        const podatci = await apiRequest(
-+          "products/category/motorcycle?limit=4",
-+        );
-+        setMotocikli(podatci.products);
-+      } catch {
-+        setGreska("Dohvat motocikala nije uspio.");
-+      } finally {
-+        setUcitavanje(false);
-+      }
-+    }
-+    dohvatiPodatke();
-+  }, [brojPokusaja]);
-+
-+  function ponoviDohvat() {
-+    setUcitavanje(true);
-+    setGreska("");
-+    setBrojPokusaja(brojPokusaja + 1);
-+  }
-+
-   return (
-     <>
-       <section className="section">
-@@ -26,6 +59,26 @@
-           </Link>
-         </div>
-       </section>
-+      <section className="section">
-+        <p className="oznaka">Uskoro u ponudi</p>
-+        <h2>Motocikli</h2>
-+        <p>
-+          Uz aute uskoro nudimo i motocikle. Ovo su prvi modeli koje pripremamo.
-+        </p>
-+        {ucitavanje && <p>Učitavanje motocikala...</p>}
-+        {greska && (
-+          <>
-+            <p className="greska">{greska}</p>
-+            <Button onClick={ponoviDohvat}>Pokušajte ponovno</Button>
-+          </>
-+        )}
-+        <div className="kartice">
-+          {/* Četiri motocikla prikazuju se po dva u redu. */}
-+          {motocikli.map((motocikl) => (
-+            <KarticaMotocikla key={motocikl.id} motocikl={motocikl} />
-+          ))}
-+        </div>
-+      </section>
-       <KontaktCTA
-         naslov="Niste sigurni odakle početi?"
-         opis="Pošaljite kratak opis i dogovorimo koji pregled ima smisla za vaše vozilo."
+ISTO - src/pages/Naslovnica.jsx
+Identično prethodnom predavanju.
 
 ========================================================================
 ISTO - src/pages/NotFound.jsx
@@ -474,317 +938,97 @@ ISTO - src/pages/Usluge.jsx
 Identično prethodnom predavanju.
 
 ========================================================================
-IZMIJENJENO - src/pages/Vozila.jsx
---- prethodno/src/pages/Vozila.jsx
-+++ sada/src/pages/Vozila.jsx
-@@ -2,7 +2,9 @@
- import { Button } from "../components/Button";
- import FilterVozila from "../components/FilterVozila";
- import KarticaVozila from "../components/KarticaVozila";
-+import UsporedbaVozila from "../components/UsporedbaVozila";
- import { apiRequest } from "../api";
-+import { najviseUsporedbe } from "../konstante";
- 
- const pocetniFilteri = {
-   pojamPretrage: "",
-@@ -19,6 +21,7 @@
-   const [greska, setGreska] = useState("");
-   const [brojPokusaja, setBrojPokusaja] = useState(0);
-   const [filteri, setFilteri] = useState(pocetniFilteri);
-+  const [usporedba, setUsporedba] = useState([]);
- 
-   // Marka ostaje u popisu samo kad joj je ovo prvo pojavljivanje.
-   const sveMarke = vozila.map((vozilo) => vozilo.brand);
-@@ -27,6 +30,18 @@
-     ...sveMarke.filter((marka, indeks) => sveMarke.indexOf(marka) === indeks),
-   ];
- 
-+  // Najbolja ocjena i najniža cijena traže se među svim autima, a ne samo među filtriranima.
-+  // reduce prolazi kroz aute i zadržava boljeg od dva uspoređena auta.
-+  const najboljeOcijenjeno = vozila.reduce(
-+    (najbolje, vozilo) => (vozilo.rating > najbolje.rating ? vozilo : najbolje),
-+    vozila[0],
-+  );
-+  const najjeftinije = vozila.reduce(
-+    (najjeftinije, vozilo) =>
-+      vozilo.price < najjeftinije.price ? vozilo : najjeftinije,
-+    vozila[0],
-+  );
-+
-   const pojam = filteri.pojamPretrage.trim().toLowerCase();
-   const rezultati = vozila.filter(
-     (vozilo) =>
-@@ -73,36 +88,88 @@
-     setFilteri({ ...filteri, [event.target.name]: event.target.value });
-   }
- 
-+  // Isti gumb dodaje auto u usporedbu ili ga iz nje uklanja.
-+  function promijeniUsporedbu(vozilo) {
-+    if (usporedba.some((odabrano) => odabrano.id === vozilo.id)) {
-+      setUsporedba(usporedba.filter((odabrano) => odabrano.id !== vozilo.id));
-+    } else {
-+      setUsporedba([...usporedba, vozilo]);
-+    }
-+  }
-+
-   return (
--    <section className="section">
--      <h2>Auti na prodaju</h2>
--      <p>Svaki auto prolazi pregled u našoj radionici prije prodaje.</p>
--      {ucitavanje && <p>Učitavanje auta...</p>}
--      {greska && (
--        <>
--          <p className="greska">{greska}</p>
--          <Button onClick={ponoviDohvat}>Pokušajte ponovno</Button>
--        </>
-+    <>
-+      {/* Izdvojeni auti prikazuju se u zasebnoj sekciji tek kad su auti dohvaćeni. */}
-+      {vozila.length > 0 && (
-+        <section className="section">
-+          <h2>Izdvojeno iz ponude</h2>
-+          <p>Auto s najboljom ocjenom kupaca i najjeftiniji auto u ponudi.</p>
-+          <div className="kartice kartice-vozila">
-+            <KarticaVozila
-+              vozilo={najboljeOcijenjeno}
-+              usporedba={usporedba}
-+              onUsporedi={promijeniUsporedbu}
-+            />
-+            <KarticaVozila
-+              vozilo={najjeftinije}
-+              usporedba={usporedba}
-+              onUsporedi={promijeniUsporedbu}
-+            />
-+          </div>
-+        </section>
-       )}
--      <FilterVozila
--        filteri={filteri}
--        marke={marke}
--        onPromijeni={promijeniFilter}
--        onPonisti={() => setFilteri(pocetniFilteri)}
--      />
--      {!ucitavanje && !greska && (
--        <p>
--          {rezultati.length > 0
--            ? `Pronađeno auta: ${rezultati.length}`
--            : "Nema auta za odabrane filtre."}
--        </p>
-+      <section className="section">
-+        <h2>Auti na prodaju</h2>
-+        <p>Svaki auto prolazi pregled u našoj radionici prije prodaje.</p>
-+        {ucitavanje && <p>Učitavanje auta...</p>}
-+        {greska && (
-+          <>
-+            <p className="greska">{greska}</p>
-+            <Button onClick={ponoviDohvat}>Pokušajte ponovno</Button>
-+          </>
-+        )}
-+        <FilterVozila
-+          filteri={filteri}
-+          marke={marke}
-+          onPromijeni={promijeniFilter}
-+          onPonisti={() => setFilteri(pocetniFilteri)}
-+        />
-+        {!ucitavanje && !greska && (
-+          <p>
-+            {rezultati.length > 0
-+              ? `Pronađeno auta: ${rezultati.length}`
-+              : "Nema auta za odabrane filtre."}
-+          </p>
-+        )}
-+        {usporedba.length > 0 && (
-+          <p>
-+            Odabrano za usporedbu: {usporedba.length} od {najviseUsporedbe}.{" "}
-+            {/* Poveznica na id sekcije pomiče stranicu do usporedbe ispod auta. */}
-+            <a href="#usporedba">Otvorite usporedbu</a>
-+          </p>
-+        )}
-+        {usporedba.length === najviseUsporedbe && (
-+          <p>Usporedba je puna. Uklonite auto da biste dodali drugi.</p>
-+        )}
-+        <div className="kartice kartice-vozila">
-+          {rezultati.map((vozilo) => (
-+            <KarticaVozila
-+              key={vozilo.id}
-+              vozilo={vozilo}
-+              usporedba={usporedba}
-+              onUsporedi={promijeniUsporedbu}
-+            />
-+          ))}
-+        </div>
-+      </section>
-+      {usporedba.length > 0 && (
-+        <UsporedbaVozila
-+          usporedba={usporedba}
-+          onUkloni={promijeniUsporedbu}
-+          onOcisti={() => setUsporedba([])}
-+        />
-       )}
--      <div className="kartice kartice-vozila">
--        {rezultati.map((vozilo) => (
--          <KarticaVozila key={vozilo.id} vozilo={vozilo} />
--        ))}
--      </div>
--    </section>
-+    </>
-   );
- };
- 
+ISTO - src/pages/Vozila.jsx
+Identično prethodnom predavanju.
 
 ========================================================================
 IZMIJENJENO - src/style.css
 --- prethodno/src/style.css
 +++ sada/src/style.css
-@@ -1069,3 +1069,150 @@
-   text-align: right;
-   font-weight: bold;
+@@ -1216,3 +1216,84 @@
+   border-color: var(--tekst);
+   background: var(--tekst);
  }
 +
-+/* Nadogradnja PRED60: usporedba auta ponovno koristi gumbe, oznaku i sliku kartice. */
-+/* PRED60: gumb dobiva font stranice, kao i poveznica s istom klasom. */
-+.gumb {
-+  font: inherit;
++/* Nadogradnja PRED61: neispravna polja i raspodjela ocjena; paneli ponovno koriste klasu forma. */
++/* PRED61: selektor je jednako jak kao .forma input, a kasnije pravilo pobjeđuje. */
++.forma input[aria-invalid="true"],
++.forma textarea[aria-invalid="true"] {
++  border: 2px solid red;
 +}
 +
-+.gumb:disabled {
-+  opacity: 0.5;
-+  cursor: not-allowed;
-+}
-+
-+/* PRED60: gumbi kartice auta ostaju na dnu kartice. */
-+.kartica-usluga .actions {
-+  margin-top: auto;
-+}
-+
-+/* PRED60: poveznica na #usporedba ne skriva naslov ispod ljepljivog zaglavlja. */
-+.usporedba-vozila {
-+  scroll-margin-top: 80px;
-+}
-+
-+/* PRED60: na uskom zaslonu tablica se pomiče vodoravno unutar omotača. */
-+.usporedba-omotac {
-+  overflow-x: auto;
-+  border: 1px solid var(--rub);
-+  border-radius: 10px;
-+  background: var(--bijela);
-+  box-shadow: var(--box-shadow);
-+}
-+
-+.tablica-usporedbe {
-+  width: 100%;
-+  min-width: 560px;
-+  border-spacing: 0;
-+}
-+
-+.tablica-usporedbe th,
-+.tablica-usporedbe td {
-+  padding: 12px 16px;
-+  border-bottom: 1px solid var(--rub);
-+  text-align: center;
-+}
-+
-+/* PRED60: prvi stupac s nazivima redaka odvojen je bojom i poravnat lijevo. */
-+.tablica-usporedbe tbody th {
-+  text-align: left;
-+  color: var(--tamna);
-+  background: var(--svijetla);
-+}
-+
-+.tablica-usporedbe .kartica-slika {
-+  height: 120px;
-+  border-radius: 10px;
-+}
-+
-+/* PRED60: najpovoljnija vrijednost u retku dobiva podlogu i podebljani tekst. */
-+.tablica-usporedbe .najbolje {
-+  font-weight: bold;
-+  color: var(--tamna);
-+  background: var(--rub);
-+}
-+
-+/* PRED60: motocikli uskoro u ponudi; vodoravne kartice sa svijetlom fotografijom i tamnim sadržajem. */
-+.kartica-motocikla {
-+  flex: 1 1 400px;
++/* PRED61: retci raspodjele ocjena razmaknuti su jednako kao polja obrasca. */
++.raspodjela-ocjena {
 +  display: flex;
-+  flex-wrap: wrap;
-+  border-radius: 16px;
-+  overflow: hidden;
-+  box-shadow: var(--box-shadow);
++  flex-direction: column;
++  gap: 0.5rem;
++  margin: 0 0 0.5rem;
++  padding: 0;
 +}
 +
-+/* PRED60: omotač fotografije rasteže se do pune visine kartice, a oznaka stoji u njegovu kutu. */
-+.motocikl-foto {
-+  position: relative;
-+  flex: 1 1 180px;
++.raspodjela-ocjena li {
 +  display: flex;
 +  align-items: center;
-+  justify-content: center;
-+  padding: 24px 16px;
++  gap: 0.75rem;
++}
++
++/* PRED61: appearance: none uklanja izgled preglednika, pa traka dobiva vlastitu visinu i zaobljenje. */
++.raspodjela-ocjena progress {
++  flex: 1;
++  height: 14px;
++  appearance: none;
++  border: 1px solid var(--rub);
++  border-radius: 7px;
++  overflow: hidden;
 +  background: var(--svijetla);
 +}
 +
-+.motocikl-foto img {
-+  width: 100%;
-+  max-height: 170px;
-+  object-fit: contain;
++/* PRED61: podloga i ispunjeni dio trake; -webkit- vrijedi za Chrome i Safari, -moz- za Firefox. */
++.raspodjela-ocjena progress::-webkit-progress-bar {
++  background: var(--svijetla);
 +}
 +
-+/* PRED60: oznaka Uskoro stoji u kutu fotografije motocikla. */
-+.motocikl-oznaka {
-+  position: absolute;
-+  top: 12px;
-+  left: 12px;
-+  padding: 4px 10px;
-+  border-radius: 20px;
-+  font-size: 0.8rem;
-+  font-weight: bold;
-+  color: var(--bijela);
++.raspodjela-ocjena progress::-webkit-progress-value {
++  border-radius: 7px;
 +  background: var(--tamna);
 +}
 +
-+.motocikl-sadrzaj {
-+  flex: 1 1 200px;
++.raspodjela-ocjena progress::-moz-progress-bar {
++  border-radius: 7px;
++  background: var(--tamna);
++}
++
++/* PRED61: brojevi su iste širine i poravnati desno, pa trake završavaju u istoj točki. */
++.raspodjela-ocjena strong {
++  min-width: 1.5rem;
++  text-align: right;
++  color: var(--tamna);
++}
++
++/* PRED61: polja rezervacije dijele red; prelamaju se kad nema mjesta. */
++.rezervacija-polja {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 1rem;
++  margin-bottom: 0.6rem;
++}
++
++.rezervacija-polje {
++  flex: 1 1 220px;
 +  display: flex;
 +  flex-direction: column;
-+  gap: 0.3rem;
-+  padding: 24px;
-+  color: var(--bijela);
-+  background: var(--tekst);
++  gap: 0.4rem;
 +}
 +
-+.motocikl-sadrzaj p,
-+.motocikl-sadrzaj h3 {
-+  margin: 0;
-+}
-+
-+.motocikl-marka {
-+  font-size: 0.8rem;
-+  letter-spacing: 1px;
-+  text-transform: uppercase;
-+  color: var(--rub);
-+}
-+
-+.motocikl-cijena {
-+  font-size: 1.5rem;
-+  font-weight: bold;
-+}
-+
-+/* PRED60: na tamnoj podlozi gumb je proziran s obrubom, a onemogućen ne mijenja boju pod mišem. */
-+.motocikl-sadrzaj .gumb,
-+.motocikl-sadrzaj .gumb:hover {
-+  color: var(--bijela);
-+  border-color: var(--rub);
-+  background: transparent;
-+}
-+
-+/* PRED60: auto u usporedbi ima plavi obrub kartice i tamni gumb za uklanjanje. */
-+.kartice-vozila .u-usporedbi {
-+  outline: 3px solid var(--tamna);
-+}
-+
-+.gumb-ukloni {
-+  border-color: var(--tekst);
-+  background: var(--tekst);
++/* PRED61: polje datuma i izbornik vremena iste su visine i izgleda. */
++.forma .rezervacija-polje input,
++.rezervacija-polje select {
++  padding: 10px;
++  font: inherit;
++  border: 1px solid var(--rub);
++  border-radius: 5px;
++  color: var(--tekst);
++  background: var(--bijela);
 +}
 
 ========================================================================

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import NotFound from "./NotFound";
 import GalerijaVozila from "../components/GalerijaVozila";
 import KalkulatorRata from "../components/KalkulatorRata";
-import KomentarVozila from "../components/KomentarVozila";
+import RecenzijeVozila from "../components/RecenzijeVozila";
 import { apiRequest } from "../api";
 
 const DetaljiVozila = () => {
@@ -44,17 +44,7 @@ const DetaljiVozila = () => {
     <>
       <GalerijaVozila vozilo={vozilo} />
       <KalkulatorRata cijena={vozilo.price} />
-      <section className="section">
-        <h2>Recenzije kupaca</h2>
-        <ul className="komentari">
-          {vozilo.reviews.map((recenzija) => (
-            <KomentarVozila
-              key={recenzija.reviewerEmail}
-              recenzija={recenzija}
-            />
-          ))}
-        </ul>
-      </section>
+      <RecenzijeVozila recenzije={vozilo.reviews} />
     </>
   );
 };

@@ -1,34 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "./Button";
+import GreskaPolja from "./GreskaPolja";
 
 const PretplataForma = () => {
   const navigate = useNavigate();
   const [podatci, setPodatci] = useState({
     email: "",
     privola: false,
-    obavijest: "",
+    greske: {},
   });
 
   function promijeniPodatke(naziv, vrijednost) {
     setPodatci({
       ...podatci,
       [naziv]: vrijednost,
-      obavijest: "",
+      greske: { ...podatci.greske, [naziv]: "" },
     });
   }
 
   function posalji(e) {
     e.preventDefault();
+    const noveGreske = {};
 
-    if (
-      !/^[\w.-]+@[\w.-]+\.\w{2,4}$/.test(podatci.email.trim()) ||
-      !podatci.privola
-    ) {
-      setPodatci({
-        ...podatci,
-        obavijest: `Upišite valjanu adresu e-pošte i potvrdite privolu.`,
-      });
+    if (!/^[\w.-]+@[\w.-]+\.\w{2,4}$/.test(podatci.email.trim())) {
+      noveGreske.email = "Upišite valjanu adresu e-pošte.";
+    }
+
+    if (!podatci.privola) {
+      noveGreske.privola = "Potvrdite da želite primati novosti.";
+    }
+
+    if (Object.keys(noveGreske).length > 0) {
+      setPodatci({ ...podatci, greske: noveGreske });
       return;
     }
 
@@ -43,19 +47,24 @@ const PretplataForma = () => {
         name="email"
         value={podatci.email}
         type="email"
+        aria-invalid={Boolean(podatci.greske.email)}
+        aria-describedby="greska-email-novosti"
         onChange={(e) => promijeniPodatke(e.target.name, e.target.value)}
       />
+      <GreskaPolja id="greska-email-novosti" poruka={podatci.greske.email} />
       <label htmlFor="privola" className="privola">
         <input
           id="privola"
           type="checkbox"
           name="privola"
           checked={podatci.privola}
+          aria-invalid={Boolean(podatci.greske.privola)}
+          aria-describedby="greska-privola"
           onChange={(e) => promijeniPodatke(e.target.name, e.target.checked)}
         />
         Želim primati novosti o uslugama autoservisa
       </label>
-      {podatci.obavijest && <p role="status">{podatci.obavijest}</p>}
+      <GreskaPolja id="greska-privola" poruka={podatci.greske.privola} />
       <Button type="submit">Prijavite se na novosti</Button>
     </form>
   );
